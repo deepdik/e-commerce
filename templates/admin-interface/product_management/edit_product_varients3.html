@@ -1,0 +1,330 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+
+<style>
+  .image-list .file {
+    width: 10% !important;
+}
+
+  .add-pic{
+     margin-top:20px;
+     margin-bottom: 20px;
+  }
+
+  span.icon-times-circle{
+    position: absolute;
+    right: 5%;
+    top: 15%;
+    cursor: pointer;
+    z-index: 999;
+}
+</style>
+    <div class="user4Page ExplorerListPage">
+        <div class="layout-content">
+            <div class="layout-content-body">
+                <div class="title-bar">
+                    <h1 class="title-bar-title">
+                      <span class="d-ib">Edit Product Varients</span>
+                    </h1>
+                    <a class="btn btn-default" href="/admin/users/view_product/{{product_id}}">
+                      Back
+                    </a>
+
+                </div>
+
+
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                      
+
+                        <div class="panel m-b-lg " id="addvariant">
+                          <div class="tab-content">
+                            <div class="tab-pane fade active in" id="home-11">
+                              
+                              <div class="col-sm-12 col-md-12">
+                                <div class="demo-form-wrapper">
+                                    <form class="form member-mngmnt" method="POST" action="" enctype='multipart/form-data'>{% csrf_token%}
+
+
+                                       {% if form.errors %}
+
+
+                                            {% for field in form %}
+                                                {% for error in field.errors %}
+                                                    <p style="color:red;text-align: center; margin:0px">
+                                                        <span>{{ error|escape }}</span>
+                                                    </p>
+                                                {% endfor %}
+                                            {% endfor %}
+
+                                            {% for error in form.non_field_errors %}
+                                               <p style="color:red;text-align: center; margin:0px">
+                                                    <span>{{ error|escape }}</span>
+                                                </p>
+                                            {% endfor %}
+
+                                           {% endif %}
+
+                                            {% if messages %}
+                                            {% for message in messages %}
+                                            <p style="color:green;text-align: center;">{{message}}</p>
+                                         {% endfor %}
+                                        {% endif %}
+
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="control-label">Colors </label>
+
+                            <select class="form-control" id ="colour" name="colour" required selectedcolour="{{available_colours.colour.id}}">
+                              <option value = "">--Select Color--</option>
+                              
+                              {% for colour in colours %}
+                            <option id="colour-{{colour.id}}" value="{{colour.id}}">{{colour.name}}</option>
+
+                              {% endfor %}
+                              
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="control-label">Price (MRP)</label>
+                            <input name="price" id="" class="form-control" type="number" value="{{available_colours.actual_price}}" required>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="control-label">Offer Price</label>
+                            <input id="" name="special_price" class="form-control" type="number" value="{{available_colours.special_price}}" required>
+                          </div>
+                        </div>
+                      
+                        <div class="col-sm-12 col-md-12">
+
+                          <div class="form-group">
+                           <div class="add-pic">
+                            <label class="control-label">Add More Images <br><small class="text-info">(Dimension should be : 900 X 1200 px (3:4 ratio))</small></label><br>
+                            <button id="add-img" class="btn btn-warning" type="button" style="padding: 0px; width: 30px; height: 30px; font-size: 30px; font-weight: bold; line-height: 30px; border-radius: 50%;">+</button>
+                            <ul class="file-list image-list" style="margin-top: 20px;">
+
+
+                             {% for img  in available_colours.images %} 
+                              <li class="file">
+                                <div class="file-thumbnail" style="background-image: url({{img.image.url}})"></div>
+                                
+                              <button class="file-delete-btn delete" title="Delete" type="button"  id ="{{img.id}}"   onclick="deleteProductImgFunction(this.id)">
+                              <span class="icon icon-remove"></span>
+                            </button>
+                            </li>
+                            {% endfor %}
+                          
+                            </ul>
+                           </div>
+                          </div>
+                          <button type="button" class="btn mb-2 btn-primary" id="add-inventory">Add Size Inventory</button>          
+                        </div>
+                      </div>
+                      <div class="row size-inventory" id="select_size_list" select_size_list="{{size_list}}">
+
+                        {% for size in available_colours.size_and_qty.all%}
+
+          
+
+
+                         <div class="col-md-6 sizes inventory-group">
+                          <span class="icon"></span>
+                          <div class="col-md-6">
+                            <label class="control-label">Sizes : </label>
+                            <select class="form-control" id="{{size.id}}" selected_size="{{size.size}}" name="size" required > 
+                                  <option value="">--select size--</option>
+                                  <option id="XS" value="XS">XS</option>
+                                  <option id="S"  value="S">S</option>
+                                  <option id="M" value="M">M</option>
+                                  <option id="L" value="L">L</option>
+                                  <option id="XL" value="XL">XL</option>
+                                  <option id="XXL" value="XXL">XXL</option>
+                                  <option id="XXXL" value="XXXL">XXXL</option>
+
+                                </select>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="about" class="control-label">Quantity : </label>
+                            <input type="number" value="{{size.initial_qty}}" name="qty" class="form-control" required/>
+                          </div>
+                        </div>
+
+                        {% endfor %}
+
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col-sm-12 col-md-12 mt-2 text-right">
+                          <button  value="1" name ="click" class="btn btn-default">Save</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% include 'admin-interface/footer.html' %}
+
+<script >
+
+  var colour = $('#colour').attr('selectedcolour');
+  $('#colour option[id="colour-' + colour + '"]').prop('selected', true);
+  
+  var sizes =   JSON.parse($('#select_size_list').attr('select_size_list'))
+ 
+  for (var i = 0; i < sizes.length; i++) {
+        console.log(sizes[i])
+
+        var size = $("#"+sizes[i]).attr('selected_size');
+
+        $('#' + sizes[i] + ' '+ 'option[value="' + size + '"]').prop('selected', true);
+    }
+
+ 
+
+
+
+function deleteProductImgFunction(id){
+    
+    $.ajax(
+    {
+        type:"POST",
+        url: "/api/v1/admin/designer_stylist/product/colour/image/delete/"+id,
+        headers: { "X-CSRFToken":'{{csrf_token}}',
+                    "sessionid":'{{request.session.session_key}}'                             },
+      
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            console.log('ajax.statusCode: 404');
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+
+
+</script>
+
+
+
+
+
+
+<script >
+  
+        $(document).ready(function(){
+        $("#add-img").click(function(){
+          $(".image-list").append('<li class="file"><div class="file-link logoImg gal-box"><img class="gal-result" src="/media/img/img-dummy-product.jpg" /><input type="file" name="product_img" class="gal-file" style="width: 85px; margin: 0 auto;"></div><button class="file-delete-btn delete" title="Delete" type="button"><span class="icon icon-remove"></span></button></li>');
+
+          $(".delete").on('click',function(){
+            $(this).parent('.file').remove();
+          });
+        });
+      });
+</script>
+
+    <script>
+
+ 
+    $(document).ready(function(){
+
+
+      $(document).on("change",".gal-file",function(e2) {
+        var img1 = e2.target.files[0];
+        //alert(e2.target);
+        if(!iEdit.open(img1, true, function(res1){
+        console.log(res1)
+        $(e2.target).parent().find(".gal-result").attr("src", res1);  
+        })){
+        alert("Whoops! That is not an image!");
+        }
+      });
+    
+               $("#logo-file").change(function(e){
+                var img = e.target.files[0];
+                if(!iEdit.open(img, true, function(res){
+                 $("#result1").attr("src", res);      
+                })){
+                  alert("Whoops! That is not an image!");
+                }
+               });
+               $(document).on("click",".add-facility .plus-btn",function() {
+                $('.add-facility .facility-box').append('\
+                   <div class="col-md-6">\
+                    <input id="" class="form-control" type="date">\
+                    <span class="del">x</span>\
+                   </div>');
+                  $(".add-facility .del").on('click',function(){
+                    $(this).parent('.col-md-6').remove();
+                  });
+              });
+              });
+
+    </script>
+
+
+        <script>
+ 
+     $(document).ready(function(){
+        $("#add-inventory").click(function(){
+          $(".size-inventory").append('<div class="col-md-6 sizes inventory-group"><span class="icon icon-times-circle cross"></span><div class="col-md-6"><div class="form-group"><label class="control-label">Size : </label><select class="form-control" name="size" required ><option value="">--select size--</option><option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option><option value="XXXL">XXXL</option></select></div></div><div class="col-md-6"><div class="form-group"><label for="about" class="control-label">Quantity : </label><input type="number" name="qty" class="form-control" required/></div></div></div>');
+ 
+          $(".cross").on('click',function(){
+            $(this).parent('.sizes').remove();
+          });
+        });
+
+        //   $('.inventory-group select').on('change', function(){
+        //     $('.inventory-group select').find("option:selected").attr('disabled', false).attr('disabled', true);
+        //   });
+
+        // $("#add-inventory").click(function(){
+        //   $(".size-inventory .inventory-group:first-child").clone().appendTo('.size-inventory');
+        //   $(".size-inventory .inventory-group:last-child select").val('');
+        //   $(".size-inventory .inventory-group:last-child input[type=number]").val('');
+
+        //   $('.inventory-group select').on('change', function(){
+            
+        //     $('.inventory-group select').find("option:selected").attr('disabled', true);
+        //   });
+        // });
+
+      });
+ 
+ 
+    </script>
+
+
+

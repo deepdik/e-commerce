@@ -1,0 +1,134 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %} 
+
+
+  <style>
+    .title-bar .form-group-lg .form-control {
+      height: 36px;
+      padding-left: 45px !important;
+      padding: 5px 15px;
+      font-size: 14px;
+      line-height: 1.333333;
+      border-radius: 0;
+      margin: 10px 0;
+    }
+    .title-bar .form-group-lg .input-with-icon .input-icon {
+      font-size: 18px;
+      height: 36px;
+      line-height: 56px;
+      width: 46px;
+    }
+
+  tbody.pro-list tr td ul{
+    list-style: none;
+    padding-left: 0px;
+  }
+  tbody.pro-list tr td ul li{
+    line-height: 15px;
+  }
+  tbody.pro-list tr td ul li span{
+    float: right;
+  }
+  .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    padding: 5px;
+  }
+  tbody.pro-list tr td .widget {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+tbody.pro-list tr td .card-body .btn-primary.btn-sm {
+    padding: 0;
+}
+tbody.pro-list tr td .widget .btn {
+    display: block;
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin: 5px !important;
+    padding: 0;
+    width: 20px;
+}
+</style>
+
+    <div class="responsiveTbPage offersPage">
+      <div class="layout-content">
+        <div class="layout-content-body">
+          <div class="title-bar">
+            <h1 class="title-bar-title">
+              <span class="d-ib">Edit Delivery Details</span>
+            </h1>
+          </div>
+
+
+
+
+          <!--div class="text-center m-b">
+            <h3 class="m-b-0">Bootstrap Responsive Table</h3>
+            <small>Scroll horizontally on small devices, when viewing is smaller than 768px.</small>
+          </div-->
+          <div class="row">
+
+            <div class="col-md-6 col-md-offset-3 col-xs-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="m-t-0 text-center" style="margin-bottom: 25px">Edit Details</h4>
+
+
+
+                  <form class="form" method="POST" autocomplete="off" action="/admin/users/delivery_charges_edit/?id={{id}}"  enctype='multipart/form-data'>{% csrf_token%}
+                    <div class="form-group col-md-4">
+                      <label for="email-1">Distance From (Kms)</label>
+                      <input id="email-1" class="form-control" type="number" name="dist_from" required value="{{dist_from}}">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="email-1">Distance To (Kms)</label>
+                      <input id="email-1" class="form-control" type="number" name= "dist_to" required value="{{dist_to}}"> 
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="email-1">Charges (Rs)</label>
+                      <input id="email-1" class="form-control" type="number" name="charge" required value="{{charge}}">
+                    </div>
+                  {% if form.errors %}
+
+
+                      {% for field in form %}
+                          {% for error in field.errors %}
+                              <p style="color:red;text-align: center; margin:0px">
+                                  <span>{{ error|escape }}</span>
+                              </p>
+                          {% endfor %}
+                      {% endfor %}
+
+                      {% for error in form.non_field_errors %}
+                         <p style="color:red;text-align: center; margin:0px">
+                              <span>{{ error|escape }}</span>
+                          </p>
+                      {% endfor %}
+
+                     {% endif %}
+
+                      {% if messages %}
+                      {% for message in messages %}
+                      <p style="color:green;text-align: center;">{{message}}</p>
+                   {% endfor %}
+                  {% endif %}
+                    <div class="form-group" style="margin-left:15px">
+                      <a href="/admin/users/delivery_charges/" class="btn btn-default" type="submit">Back</a>
+                     <button  id="submit" class="btn btn-primary" type="submit">Save</button>
+                          
+                    </div>
+
+                    <input type="hidden" name="id" value="{{id}}">
+                  </form>
+
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+{% include 'admin-interface/footer.html' %}

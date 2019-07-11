@@ -1,0 +1,214 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+
+
+<style>
+  .size-inventory .col-md-3{
+    border-right: 1px solid #d4d4d4db;
+    margin-top: 10px;
+  }
+  .product-images{
+    width: 40% !important;
+  }
+  .product-images img{
+    width: 100%;
+    height: auto;
+  }
+
+  .product-details{
+    width: 60% !important;
+    position: relative;
+  }
+  .product-attributes{
+    border-bottom: 1px dotted #2c3e50;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+  .edel-btns{
+    position: absolute;
+    right: 30px;
+    top: 13px;
+  }
+  .flexslider .slides img{
+    height: 200px;
+    width: auto;
+    margin: auto;
+  }
+  ol.flex-control-thumbs{
+    display: flex;
+    justify-content: center;
+  }
+  ol.flex-control-thumbs li {
+    width: 10%;
+    border-left: 1px solid #687d92;
+    border-top: 1px solid #687d92;
+    border-bottom: 1px solid #687d92;
+    padding: 2px;
+  }
+  ol.flex-control-thumbs li:last-child{
+    border-right: 1px solid #687d92;
+
+  }
+
+  .flex-control-thumbs {
+    margin: 16px 0 0px !important;
+
+}
+.product-inventory{
+  margin-bottom: 20px !important;
+}
+</style>
+
+  <div class="layout-content">
+    <div class="layout-content-body">
+      <div class="title-bar">
+        <h1 class="title-bar-title">
+          <span class="d-ib">Variant(s) of {{product_name}}</span>
+        </h1>
+        <a class="btn btn-default" href="/admin/users/view_product/{{product_id}}">Back</a>
+        <span style="float: right;">
+          <a class="btn btn-default" href="/admin/users/add_product_varients/{{product_id}}">Add Variant</a>
+        </span>
+      </div>
+
+      <div class="row gutter-xs">
+        <div class="col-xs-12">
+
+          {% for available_colour in available_colours %}  
+
+          <div class="panel m-b-lg">
+            <div class="product">
+              <div class="product-images">
+                <div class="flexslider">
+                  <ul class="slides">
+
+                    {% for img in available_colour.images %}
+
+                    <li data-thumb={{img.image.url}} style="margin-top: 10px">
+                      <img src="{{img.image.url}}" alt="Sri Elephant T-shirt">
+                    </li>
+
+                    {% endfor %} 
+
+                  </ul>
+                </div>
+              </div>
+
+              <div class="product-details">
+                <h3 class="product-name">Variant {{forloop.counter}} </h3>
+                <div class="edel-btns">
+                  <a class="btn btn-primary btn-sm" href = "/admin/users/edit_product_varient/{{product_id}}/{{available_colour.id}}" type="button">
+                    <span class="icon icon-edit icon-lg icon-fw"></span>
+                  </a>
+                  <button class="btn btn-danger btn-sm" type="button" data-toggle="modal"  id ="{{available_colour.id }}"  data-target="#deleteUser"  onclick="deleteProductVarient(this.id)">
+                    <span class="icon icon-trash icon-lg icon-fw"></span>
+                  </button>
+                </div>
+                <div class="product-sku">
+                  <h6><strong>Color :</strong> {{available_colour.colour.name}}</h6>
+                  <h6><strong>Price :</strong> <i class="icon icon-inr"></i> {{available_colour.actual_price}}</h6>
+                  <h6><strong>Offer Price :</strong>  <i class="icon icon-inr"></i> {{available_colour.special_price}}</h6>
+                </div>
+                <div class="product-inventory">
+
+                  {% for size in available_colour.size_and_qty.all %}
+
+                  <div class="row">
+                    <div class="col-md-3"><strong>Size :</strong> {{size.size}}</div>
+                    <div class="col-md-3"><strong>Quantity :</strong> {{size.available_qty}}</div>
+                  </div>
+                  {% endfor %}
+                  
+                </div>
+              
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% include 'admin-interface/footer.html' %}
+
+
+
+    <div id="deleteUser" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <span class="text-danger icon icon-times-circle icon-5x"></span>
+              <h3 class="text-danger">Danger</h3>
+              <h4>Are you sure, you want to delete this item?</h4>
+              <div class="m-t-lg">
+                <button class="btn btn-danger" onclick="deleteProductVarientFunction(this.id)" id="product_varient_id" varient_id="" data-dismiss="modal" type="button">Continue</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+<script >
+  
+
+function deleteProductVarient(clicked_id){   
+    document.getElementById('product_varient_id').setAttribute('varient_id', clicked_id)
+  };
+
+
+  function deleteProductVarientFunction(){
+      var id  = document.getElementById('product_varient_id').getAttribute("varient_id");
+
+    $.ajax(
+      {
+        type:"POST",
+        url: "/api/v1/admin/designer_stylist/product/varient/delete/{{product_id}}/"+id,
+        headers: { "X-CSRFToken":'{{csrf_token}}'},
+
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+</script>
+
+
+
+  

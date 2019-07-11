@@ -1,0 +1,380 @@
+
+ {% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+
+<style>
+  .datepicker.dropdown-menu {
+     width: 237px;
+    padding: 1.07143em 1.78571em;
+    -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    right: 0 !important;
+    }
+  .datepicker tbody {
+    color: #666; }
+  .datepicker table tr td span.active,
+  .datepicker table tr td span.active:hover,
+  .datepicker td .month.active {
+    background: #1976d2 !important; }
+  .datepicker td.active,
+  .datepicker td.selected {
+    background: #1976d2 !important; }
+    .default input[type=text] {
+    border: 1px solid #cad6e2;
+      border-radius: 5px;
+    }
+</style>
+
+ <div class="user4Page ExplorerListPage">
+        <div class="layout-content">
+            <div class="layout-content-body">
+                <div class="title-bar">
+                    <h1 class="title-bar-title">
+                      <span class="d-ib">My In App Profile</span>
+                    </h1>
+                </div>
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                        <div class="panel m-b-lg">
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#home-11" data-toggle="tab">Basic Info</a></li>
+                            <li><a href="/admin/users/collection/">Collection</a></li>
+                          </ul>
+
+                          {% if messages %}
+                          {% for message in messages %}
+                          <p style="color:green;text-align: center;margin-top: 10px">{{message}}</p>
+                           {% endfor %}
+                          {% endif %}
+
+                          {% if form.errors %}
+
+
+
+                          {% for field in form %}
+                              {% for error in field.errors %}
+                                  <p style="color:red;text-align: center;margin-top: 10px">
+                                      {{ error|escape }}
+                                  </p>
+                              {% endfor %}
+                          {% endfor %}
+
+                          {% for error in form.non_field_errors %}
+                             <p style="color:red;text-align: center;margin-top: 10px">
+                                  {{ error|escape }}
+                              </p>
+                          {% endfor %}
+
+                          {% endif %}
+
+                          <div class="tab-content">
+                            <div class="tab-pane fade active in" id="home-11">
+                              
+                              <div class="col-sm-12 col-md-12">
+                                <div class="demo-form-wrapper">
+
+                                  {% if userdata.id %}
+
+                                  <form class="form form-horizontal" method="POST" enctype='multipart/form-data' action="/admin/users/appin_profile/{{usertype}}/{{userdata.id}}">
+
+                                  {% else %}
+
+                                  <form class="form form-horizontal" method="POST" enctype='multipart/form-data' action="/admin/users/appin_profile/{{request.COOKIES.role}}">
+
+                                  {% endif %}
+
+                                  {% csrf_token%}
+                                    <div class="col-sm-8 col-md-8" >
+
+                                      <div class="form-group">
+                                       <div class="col-md-6">
+                                        <label class="control-label">Name</label>
+                                        <input id="" value="{{userdata.name}}" name="name" class="form-control" type="text" required>
+                                       </div>
+                                       <div class="col-md-6">
+                                        <label class="control-label">Professional Email Id</label>
+                                        <input id="" value="{{userdata.email}}" name="email" class="form-control" type="email" required>
+                                       </div>
+                                      </div>
+
+
+                                      <div class="form-group">
+                                       <div class="col-md-4">
+                                        <label class=" control-label">Profile Image</label>
+                                          <div class="pic-box">
+                                            <div class="logoImg">
+
+
+                                            {% if userdata.profileimg %}
+                                            <img src="{{userdata.profileimg.url}}" id="result1">
+
+                                            {% else %}
+
+                                             <img src="/media/img/3002121059.jpg" id="result1">                                       
+
+                                            {% endif %}
+
+                                             
+
+                                             <input id="logo-file" name="profileimg" type="file" class="hide" >
+
+                                             <label for="logo-file" class="btn btn-large"></label>
+                                            </div>
+                                          </div>
+                                       </div>
+
+
+                                       <div class="col-md-4">
+                                        <label class=" control-label">Cover Image</label>
+                                          <div class="pic-box">
+                                            <div class="logoImg">
+
+                                            {% if userdata.coverimg %}
+                                            <img src="{{userdata.coverimg.url}}" id="result2">
+
+                                            {% else %}
+
+                                             <img src="/media/img/3002121059.jpg" id="result2">
+                                        
+
+                                            {% endif %}
+
+
+
+
+                                             <input name = "coverimg" id="coverlogo-file" type="file" class="hide" >
+
+                                             <label for="coverlogo-file" class="btn btn-large"></label>
+                                            </div>
+                                          </div>
+                                       </div>
+
+
+                                      </div>
+
+                                    
+
+                                      <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label for="about" class="control-label">About</label>
+                                          <textarea id="" class="form-control" name= "about" rows="5" required>{{achievement.about}}</textarea>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class=" control-label">Awards & Achievements</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input name = "title" class="form-control" type="text" value="{{achievement.title}}" placeholder="Award Title" required>
+                                         </div>
+
+                                           <div class="input-group col-md-5">
+                                              
+                                              <input autocomplete="off" placeholder="Select Year" type="text" class="form-control datepicker" name= "year" value="{{achievement.year|date:"m/d/Y" }}" id="enddate11" style="padding: 0 10px;" required>
+                                              <div class="input-group-append">
+                                                  <div class="input-group-text ml-2">
+                                                  </div>
+                                              </div>
+ 
+ 
+                                          </div>
+
+
+                                        
+                                      </div>
+                                        <div class="form-group">
+                                       <div class="col-md-12">
+                                        <label class=" control-label">Awards Images</label><br>
+                                       <!--  <label class="file-upload-btn btn btn-primary">
+                                          Upload files
+                                          <input name = "achievement_images" class="file-upload-input" accept="image/*" type="file" name="files[]" multiple="multiple">
+                                        </label> -->
+
+                                        <input name = "achievement_images"  id="form-control-9" type="file" accept="image/*" multiple="multiple" >
+                                        <br>
+                                        <br>
+                                        <ul class="file-list">
+
+
+                                          {% if achievement_img %}
+
+                                          {% for img in achievement_img %}
+
+
+                                            <li class="file">
+                                                <div class="file-thumbnail" style="background-image: url({{img.image.url}})"></div>
+                                                
+                                              <button class="file-delete-btn delete" title="Delete" type="button"  id ="{{img.id}}" data-toggle="modal" data-target="#deleteimg" onclick="deleteimg(this.id)">
+                                              <span class="icon icon-remove"></span>
+                                            </button>
+                                            </li>
+                                            {% endfor %}
+                                          {% endif %}
+                                         
+                                          </ul> 
+                                       </div>
+                                      </div>
+                                      
+                                      <div class="form-group">
+                                      <div class="col-sm-12 col-md-12 addnew-btn">
+                                          <button class="btn btn-primary" type="submit">Save</button>
+                                          
+                                      </div>
+                                  </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="deleteimg" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <span class="text-danger icon icon-times-circle icon-5x"></span>
+              <h3 class="text-danger">Delete</h3>
+              <h4>Are you sure, you want to delete this image</h4>
+              <div class="m-t-lg">
+                <button class="btn btn-danger" id="img_id" data-dismiss="modal" type="button" imgid = "" onclick="deleteImageFunction()" />Continue</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+
+
+
+{% include 'admin-interface/footer.html' %}
+
+
+<script type="text/javascript">
+          $(document).ready(function(){
+            $("#startdate11").datepicker({
+                todayBtn:  1,
+                autoclose: true,
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $('#enddate11').datepicker('setStartDate', minDate);
+            });
+
+            $("#enddate11").datepicker()
+                .on('changeDate', function (selected) {
+                 var maxDate = new Date(selected.date.valueOf());
+                 $('#startdate11').datepicker('setEndDate', maxDate);
+            });
+        });
+
+
+</script>
+<script type="text/javascript">
+              $(document).ready(function(){
+               $("#logo-file").change(function(e){
+                var img = e.target.files[0];
+                if(!iEdit.open(img, true, function(res){
+                 $("#result1").attr("src", res);      
+                })){
+                  alert("Whoops! That is not an image!");
+                }
+               });
+               $(document).on("click",".add-facility .plus-btn",function() {
+                $('.add-facility .facility-box').append('\
+                   <div class="col-md-6">\
+                    <input id="" class="form-control" type="date">\
+                    <span class="del">x</span>\
+                   </div>');
+                  $(".add-facility .del").on('click',function(){
+                    $(this).parent('.col-md-6').remove();
+                  });
+              });
+              });
+              $(document).ready(function(){
+               $("#coverlogo-file").change(function(e){
+                var img = e.target.files[0];
+                if(!iEdit.open(img, true, function(res){
+                 $("#result2").attr("src", res);      
+                })){
+                  alert("Whoops! That is not an image!");
+                }
+               });
+               $(document).on("click",".add-facility .plus-btn",function() {
+                $('.add-facility .facility-box').append('\
+                   <div class="col-md-6">\
+                    <input id="" class="form-control" type="date">\
+                    <span class="del">x</span>\
+                   </div>');
+                  $(".add-facility .del").on('click',function(){
+                    $(this).parent('.col-md-6').remove();
+                  });
+              });
+              });
+            </script>
+
+<script type="text/javascript">
+  
+
+function deleteimg(clicked_id){
+    console.log(clicked_id)
+    document.getElementById('img_id').setAttribute('imgid',clicked_id) 
+
+  };
+
+
+function deleteImageFunction(){
+    var id  = document.getElementById('img_id').getAttribute("imgid");
+    $.ajax(
+    {
+        type:"POST",
+        url: "/api/v1/admin/delete_appin_img/"+id,
+        headers: { "X-CSRFToken":'{{csrf_token}}',
+                    "sessionid":'{{request.session.session_key}}'                             },
+      
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            console.log('ajax.statusCode: 404');
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+
+</script>

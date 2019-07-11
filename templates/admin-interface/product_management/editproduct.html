@@ -1,0 +1,566 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %} 
+
+<style>
+  .image-list .file {
+    width: 50% !important;
+}
+</style>
+    <div class="user4Page ExplorerListPage">
+        <div class="layout-content">
+            <div class="layout-content-body">
+                <div class="title-bar">
+                    <h1 class="title-bar-title">
+                      <span class="d-ib">Edit Product</span>
+                    </h1>
+                </div>
+              <a href="/admin/users/add_product/" class="btn btn-default btn-sm" style="float: right; margin-bottom: 10px;" type="button"">
+              <span class="add-btn">Add Product</span>
+              </a>
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                        <div class="panel m-b-lg">
+                          <div class="tab-content">
+                            <div class="tab-pane fade active in" id="home-11">
+                              
+                              <div class="col-sm-12 col-md-12">
+                                <div class="demo-form-wrapper">
+
+
+
+                                    <form class="form form-horizontal member-mngmnt"method="POST" action="" enctype='multipart/form-data'>{% csrf_token%}
+ 
+                                      <div class="col-sm-4 col-md-4">
+
+                                        <div class="form-group">
+                                         <div class="col-md-12 add-pic">
+                                          <label class="control-label">Add More Images</label><br>
+                                          <button id="add-img" class="btn btn-warning" type="button" style="padding: 0px; width: 30px; height: 30px; font-size: 30px; font-weight: bold; line-height: 30px; border-radius: 50%;">+</button>
+                                          <ul class="file-list image-list" style="margin-top: 20px;">
+
+                                            {% for image in images %} 
+                                            <li class="file"><div class="file-link logoImg gal-box"><img class="gal-result" src="{{image.image.url}}" /></div><button class="file-delete-btn delete" title="Delete" id="{{image.id}}" onclick="deleteProductImgFunction(this.id)" type="button"><span class="icon icon-remove"></span></button></li>
+                                            {% endfor %}
+
+
+                                          
+                                          </ul>
+                                         </div>
+                                        </div>
+                                      </div>
+
+
+
+        								            {% if form.errors %}
+
+              									    {% for field in form %}
+              									        {% for error in field.errors %}
+              									            <p style="color:red;">
+              									                <strong>{{ error|escape }}</strong>
+              									            </p>
+              									        {% endfor %}
+              									    {% endfor %}
+              									    {% for error in form.non_field_errors %}
+              									       <p style="color:red;text-align: center;">
+              									            <strong>{{ error|escape }}</strong>
+              									        </p>
+              									    {% endfor %}
+              										{% endif %}
+
+                                   {% if messages %}
+                                      {% for message in messages %}
+                                      <p style="color:green;text-align: center;">{{message}}</p>
+                                 {% endfor %}
+                                {% endif %}
+
+								            
+                                      <div class="col-sm-8 col-md-8">
+
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                          <label class="control-label">Name</label>
+                                          <input id="" value= "{{product.name}}" name="name" class="form-control" type="text" required>
+                                         </div>
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Category</label>
+                                         
+                                          <select class="form-control"  name="category" id ="category" selectedcat="{{product.category.id}}" required>
+
+                                            {% for category in allcategories %}
+
+                                            <option id ="{{category.id}}" value="{{category.id}}">{{category.cat_name}}</option>
+                                            
+                                            {% endfor %}
+
+                                          </select>
+                                         </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                         <label class=" control-label">Sub-Category</label>
+                                          <select name="subcategory" class="form-control" id="subcategory" selectedsubcat="{{product.subcategory.id}}" required>
+
+                                            {% for subcategory in allsubcategories %}
+                                            {{subcategory.subcat_name}}
+                                            <option id ="{{subcategory.id}}" value="{{subcategory.id}}">{{subcategory.subcat_name}}</option>
+                                            
+                                            {% endfor %}
+                                            
+                                           
+                                          </select>
+                                         </div>
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Sub-Sub-Category</label>
+                                          <select name="subsubcategory" class="form-control" id="subsubcategory" selectedsubsubcat="{{product.subsubcategory.id}}" required>
+
+                                            {% for subsubcategory in allsubsubcategories %}
+
+                                            <option id ="{{subsubcategory.id}}" value="{{subsubcategory.id}}">{{subsubcategory.subsubcat_name}}</option>
+                                            
+                                            {% endfor %}
+                                            
+                                          </select>
+                                         </div>
+                                        </div>
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                         <label class=" control-label">Your Category (Select from your own categories)</label>
+                                          <select name="owncategory" selectedowncat="{{product.usercategory.id}}" id ="owncategory" class="form-control" >
+                                          <option></option>
+
+                                         {% for owncategory in allowncategories %}
+                                            <option id="{{owncategory.id}}" value="{{owncategory.id}}">{{owncategory.name}}</option>
+                                          {% endfor%}
+
+                                          </select>
+                                         </div>
+
+                                      <div class="col-md-6">
+                                        <label class=" control-label">Select Main Image</label>
+                                          <div class="pic-box">
+                                            <div class="logoImg">
+
+
+                                            {% if product.main_img %}
+
+                                            <img src="{{product.main_img.url}}" id="result1">
+
+                                            {% else %}
+
+                                             <img src="/media/img/3002121059.jpg" id="result1">
+                                        
+                                            {% endif %} 
+
+                                             <input id="logo-file" name="main_img" type="file" class="hide">
+
+                                             <label for="logo-file" class="btn btn-large"></label>
+                                            </div>
+                                          </div>
+                                       </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                        <div class="col-md-12" id= "productsizes" size="{{sizes}}">
+                                          <label class="control-label">Sizes : &nbsp;&nbsp;&nbsp;</label>
+                                            <label class="custom-control custom-control-primary custom-checkbox">
+                                              <input name="size" value="1" class="custom-control-input" type="checkbox">
+                                              <span class="custom-control-indicator"></span>
+                                              <span class="custom-control-label">XS</span>
+                                            </label>
+                                            <label class="custom-control custom-control-primary custom-checkbox">
+                                              <input name="size" value="2" class="custom-control-input" type="checkbox">
+                                              <span class="custom-control-indicator"></span>
+                                              <span class="custom-control-label">S</span>
+                                            </label>
+                                            <label class="custom-control custom-control-primary custom-checkbox">
+                                              <input name="size" value="3" class="custom-control-input" type="checkbox">
+                                              <span class="custom-control-indicator"></span>
+                                              <span class="custom-control-label">M</span>
+                                            </label>
+                                            <label class="custom-control custom-control-primary custom-checkbox">
+                                              <input name="size" value="4" class="custom-control-input" type="checkbox">
+                                              <span class="custom-control-indicator"></span>
+                                              <span class="custom-control-label">L</span>
+                                            </label>
+                                            <label class="custom-control custom-control-primary custom-checkbox">
+                                              <input name="size" value="5" class="custom-control-input" type="checkbox">
+                                              <span class="custom-control-indicator"></span>
+                                              <span class="custom-control-label">XL</span>
+                                            </label>
+                                            <label class="custom-control custom-control-primary custom-checkbox">
+                                              <input name="size" value="6" class="custom-control-input" type="checkbox">
+                                              <span class="custom-control-indicator"></span>
+                                              <span class="custom-control-label">XXL</span>
+                                            </label>
+                                            <label class="custom-control custom-control-primary custom-checkbox">
+                                              <input name="size" value="7" class="custom-control-input" type="checkbox">
+                                              <span class="custom-control-indicator"></span>
+                                              <span class="custom-control-label">XXXL</span>
+                                            </label>
+                                         </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                         <div class="col-md-12">
+                                          <label class="control-label">Colors : &nbsp;&nbsp;&nbsp;</label>
+
+                                            <input type="color" id="colorpicker"  pattern="^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$" value="#bada55" style="padding: 0; border: 0; background: none; width: 20px;" required>
+
+                                            <input type="text" pattern="^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$" value="#bada55" id="hexcolor" />
+                                            <button type="button" id="add-color" required>Add</button>
+                                         </div>
+
+
+
+                                         <div class="col-md-11 col-md-offset-1">
+                                            <ul class="list-inline color-list file-list" style="margin-top: 20px; margin-left: 6px;">
+
+                                              {% for colour in product.colour.all %}
+
+                                              <li class="file"><a class="file-link"><div class="file-thumbnail" style="background:{{colour.colour}};"><input type="hidden"value="{{colour.colour}}"></div></a><button id="{{colour.id}}" for class="file-delete-btn delete" onclick = "deleteProductColourFunction(this.id)" title="Delete" type="button"><span class="icon icon-remove"></span></button></li>
+                                            {% endfor %}
+                                            </ul>
+                                         </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <div class="col-md-2" style="padding-right: 0px;">
+                                            <label for="about" class="control-label">Total Quantity : </label>
+                                          </div>
+                                          <div class="col-md-2" style="padding-left: 0px;">
+                                          	<input type="number" value= "{{product.total_quantity}}" name="quantity" min="0" class="form-control" required>
+                                          </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <div class="col-md-6">
+                                            <label class="control-label">Price</label>
+                                            <input id="" value= "{{product.actual_price}}" type="number" name="price" min="0"  class="form-control" required>
+                                          </div>
+                                          <div class="col-md-6">
+                                            <label class="control-label">Offer Price</label>
+                                            <input id="" value= "{{product.special_price}}" name="offer_price" class="form-control" type="number"  min="0">
+                                          </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <div class="col-md-6">
+                                            <label class="control-label">Material</label>
+                                            <input id="" type="text" value= "{{product.material}}" name="material" min="0"  class="form-control" required>
+                                          </div>
+                                          <div class="col-md-6">
+                                            <label class="control-label">Fit</label>
+                                            <input id="" name="fit" value= "{{product.fit}}" class="form-control" type="text"  min="0" required>
+                                          </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label for="about" class=" control-label">Description</label>
+                                            <textarea id="" name= "des" class="form-control" rows="3" required>{{product.description}}</textarea>
+                                          </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <div class=" col-sm-6 col-md-6">
+                                              <button type="submit" class="btn btn-success">Save</button>
+                                              <a href="{{backurl}}" class="btn btn-default">Back</a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </form>
+
+
+
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% include 'admin-interface/footer.html' %}
+
+
+
+<script type="text/javascript">
+	
+ $( "#category" ).change(function() {
+
+    var cat_id = $('#category').find(":selected").val();
+    console.log(cat_id)
+    $.ajax(
+    {
+        type:"GET",
+        url: "/api/v1/product/subcategory/"+cat_id,
+
+      success: function( data ) 
+        {   
+ 
+            console.log(data)
+            $('#subcategory').empty()
+
+            for (i = 0; i < (data.length); i++) {
+                
+                var subcat_name = data[i].subcat_name;
+                var category_id = data[i].category;
+                var id = data[i].id;
+
+                
+
+                $('#subcategory').prepend(
+
+                	'<option id="'+category_id+'" value="'+id+'">'+subcat_name+'</option>'
+                	)
+           } 
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+ 
+});
+
+
+ $( "#subcategory" ).change(function() {
+
+    var subcat_id = $('#subcategory').find(":selected").val();
+    var cat_id = $('#category').find(":selected").val();
+
+    $.ajax(
+    {
+      type:"GET",
+      url: "/api/v1/product/subsubcategory/"+cat_id +"/"+subcat_id,
+
+      success: function( data ) 
+        {
+          console.log(data)
+          $('#subsubcategory').empty()
+
+          for (i = 0; i < (data.length); i++) {
+            var subsubcat_name = data[i].subsubcat_name;
+            var id = data[i].id;
+
+            $('#subsubcategory').prepend(
+            	'<option value="'+id+'">'+subsubcat_name+'</option>'
+            )
+           }
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+      }
+       
+     })
+ 
+});
+
+
+var sizes = $('#productsizes').attr('size');
+
+
+        for (var i = 0; i < sizes.length; i++) {
+            
+            var val = sizes[i];
+
+          $(':checkbox[value="' + val + '"]').prop('checked', 'true');
+           
+        }
+
+
+
+
+function deleteProductImgFunction(id){
+    
+    $.ajax(
+    {
+        type:"POST",
+        url: "/api/v1/admin/designer_stylist/product/image/delete/"+id,
+        headers: { "X-CSRFToken":'{{csrf_token}}',
+                    "sessionid":'{{request.session.session_key}}'                             },
+      
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            console.log('ajax.statusCode: 404');
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+
+function deleteProductColourFunction(id){
+    
+    $.ajax(
+    {
+        type:"POST",
+        url: "/api/v1/admin/designer_stylist/product/colour/delete/"+id,
+        headers: { "X-CSRFToken":'{{csrf_token}}',
+                    "sessionid":'{{request.session.session_key}}'                             },
+      
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            console.log('ajax.statusCode: 404');
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+
+
+var category = $('#category').attr('selectedcat');
+$('#category option[id="' + category + '"]').prop('selected', true);
+
+
+var subcategory = $('#subcategory').attr('selectedsubcat');
+$('#subcategory option[id="' + subcategory + '"]').prop('selected', true);
+
+
+var subsubcategory = $('#subsubcategory').attr('selectedsubsubcat');
+$('#subsubcategory option[id="' + subsubcategory + '"]').prop('selected', true);
+
+
+var owncategory = $('#owncategory').attr('selectedowncat');
+$('#owncategory option[id="' + owncategory + '"]').prop('selected', true);
+
+
+
+
+</script>
+
+
+
+
+    <script>
+
+
+      $('#colorpicker').on('change', function() {
+        $('#hexcolor').val(this.value);
+      });
+      $('#hexcolor').on('change', function() {
+        $('#colorpicker').val(this.value);
+      });
+
+      $(document).ready(function(){
+               $("#logo-file").change(function(e){
+                var img = e.target.files[0];
+                if(!iEdit.open(img, true, function(res){
+                 $("#result1").attr("src", res);      
+                })){
+                  alert("Whoops! That is not an image!");
+                }
+               });
+               $(document).on("click",".add-facility .plus-btn",function() {
+                $('.add-facility .facility-box').append('\
+                   <div class="col-md-6">\
+                    <input id="" name="main_img" class="form-control" type="date">\
+                    <span class="del">x</span>\
+                   </div>');
+                  $(".add-facility .del").on('click',function(){
+                    $(this).parent('.col-md-6').remove();
+                  });
+              });
+             })
+
+    </script>
+
+
+    <script>
+      $(document).ready(function(){
+        $("#add-color").click(function(){
+          var abc = $('#hexcolor').val();
+          $(".color-list").append('<li class="file"><a class="file-link"><div class="file-thumbnail" style="background: '+abc+';"></div><input type="hidden" name="color" value="'+abc+'" /></a><button class="file-delete-btn delete" title="Delete" type="button"><span class="icon icon-remove"></span></button></li>');
+
+          $(".delete").on('click',function(){
+            $(this).parent('.file').remove();
+          });
+        });
+      });
+
+
+      $(document).ready(function(){
+        $("#add-img").click(function(){
+          //var abc = $('#hexcolor').val();
+          $(".image-list").append('<li class="file"><div class="file-link logoImg gal-box"><img class="gal-result" src="/media/img/img-dummy-product.jpg" /><input type="file" name="product_img" class="gal-file" style="width: 85px; margin: 0 auto;"></div><button class="file-delete-btn delete" title="Delete" type="button"><span class="icon icon-remove"></span></button></li>');
+
+          $(".delete").on('click',function(){
+            $(this).parent('.file').remove();
+          });
+        });
+      });
+    </script>
+
+    <script>
+      $(document).on("change",".gal-file",function(e2) {
+        var img1 = e2.target.files[0];
+        //alert(e2.target);
+        if(!iEdit.open(img1, true, function(res1){
+        console.log(res1)
+        $(e2.target).parent().find(".gal-result").attr("src", res1);  
+        })){
+        alert("Whoops! That is not an image!");
+        }
+      });
+    </script>

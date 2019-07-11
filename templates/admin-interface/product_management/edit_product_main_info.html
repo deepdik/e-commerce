@@ -1,0 +1,561 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+
+<style>
+  .datepicker.dropdown-menu {
+     width: 237px;
+    padding: 1.07143em 1.78571em;
+    -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    right: 0 !important;
+    }
+  .datepicker tbody {
+    color: #666; }
+  .datepicker table tr td span.active,
+  .datepicker table tr td span.active:hover,
+  .datepicker td .month.active {
+    background: #1976d2 !important; }
+  .datepicker td.active,
+  .datepicker td.selected {
+    background: #1976d2 !important; }
+    .default input[type=text] {
+    border: 1px solid #cad6e2;
+      border-radius: 5px;
+    }
+  .image-list .file {
+    width: 10% !important;
+}
+.form-horizontal #general .control-label , .form-horizontal #categories .control-label {
+    text-align: right !important;
+  }
+</style>
+  <div class="user4Page ExplorerListPage">
+    <div class="layout-content">
+      <div class="layout-content-body">
+        <div class="title-bar">
+          <h1 class="title-bar-title">
+            <span class="d-ib">Edit Product</span>
+          </h1>
+          <a class="btn btn-default" href="/admin/users/view_product/{{product.id}}">
+                Back
+      </a>
+      <span style="float: right;">
+       <a class="btn btn-default" href="/admin/users/add_product_varients/{{product.id}}">
+                add New Variant
+              </a>
+              <a class="btn btn-default" href="/admin/users/view_product_varients/{{product.id}}">
+                View Variants
+              </a>
+
+      </span>
+      </div>
+        <div class="row gutter-xs">
+          <div class="col-xs-12">
+            <div class="panel m-b-lg">
+              <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a id="gen-tab" href="#general" data-toggle="tab">General</a></li>
+                <li><a href="#mainimage" id="img-tab" data-toggle="tab">Main Image</a></li>
+                <li><a href="#categories" id="cat-tab" data-toggle="tab">Categories</a></li>
+              </ul>
+
+              <form class="form form-horizontal" method="POST" action="" enctype='multipart/form-data'>{% csrf_token%}
+
+
+               
+
+                {% if form.errors %}
+
+
+                  {% for field in form %}
+                      {% for error in field.errors %}
+                          <p style="color:red;text-align: center; margin:0px" >
+                              <span id="error_msg">{{ error|escape }}</span>
+                          </p>
+                      {% endfor %}
+                  {% endfor %}
+
+                  {% for error in form.non_field_errors %}
+                     <p style="color:red;text-align: center; margin:0px">
+                          <span id="error_msg">{{ error|escape }}</span>
+                      </p>
+                  {% endfor %}
+
+                 {% endif %}
+
+                  {% if messages %}
+                  {% for message in messages %}
+                  <p style="color:green;text-align: center;" id="error_msg">{{message}}</p>
+               {% endfor %}
+              {% endif %}
+
+              <p style="color:red;text-align: center; margin-top: 10px" >
+                   <span id="js_error_msg"></span>
+                </p>
+
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="general">
+                    <div class="col-sm-12 col-md-12">
+                      <div class="demo-form-wrapper">
+                        <div class="form-group m-t-lg">
+                          <label class="col-sm-3 col-md-4 control-label">Product's Name : </label>
+                          <div class="col-sm-6 col-md-4">
+                            <input id="" value= "{{product.name}}" name="name"  class="form-control" type="text" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-3 col-md-4 control-label">Material : </label>
+                          <div class="col-sm-6 col-md-4">
+                            <input id="" name="material" class="form-control" type="text" value="{{product.material}}"required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-3 col-md-4 control-label">Set Product as new : </label>
+                          <div class="col-sm-6 col-md-2">
+                            <div class="input-with-icon">
+                              <input class="form-control" type="text" data-provide="datepicker" data-date-today-highlight="true" autocomplete="off"  id="startdate" placeholder="From" name="new_from" value="{{product.new_from |date:"m/d/Y"|default_if_none:''}}">
+                              <span class="icon icon-calendar input-icon"></span>
+                            </div>
+                          </div>
+                          <div class="col-sm-6 col-md-2">
+                            <div class="input-with-icon">
+                              <input class="form-control" type="text" data-provide="datepicker" data-date-today-highlight="true" autocomplete="off"  id="enddate" placeholder="To" name="new_to" value="{{product.new_to|date:"m/d/Y"|default_if_none:''}}">
+                              <span class="icon icon-calendar input-icon"></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-3 col-md-4 control-label">Fit : </label>
+                          <div class="col-sm-6 col-md-4">
+                            <input id="" name="fit" value="{{product.fit}}" class="form-control" type="text" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-3 col-md-4 control-label">Pattern : </label>
+                          <div class="col-sm-6 col-md-4">
+                            <input id="" name="pattern" value="{{product.pattern}}"class="form-control" type="text" required>
+                          </div>
+                        </div>
+<!--                         <div class="form-group">
+                          <label class="col-sm-3 col-md-4 control-label">Status : </label>
+                          <div class="col-sm-6 col-md-4">
+                            
+                            {% if product.active %}
+
+                            <label class="custom-control custom-control-primary custom-radio">
+                              <input class="custom-control-input" type="radio" name="is_active" value="True" checked="checked" />
+                              <span class="custom-control-indicator"></span>
+                              <span class="custom-control-label">Active</span>
+                            </label>
+
+                            <label class="custom-control custom-control-primary custom-radio">
+                              <input class="custom-control-input" type="radio" name="is_active" value="False" />
+                              <span class="custom-control-indicator"></span>
+                              <span class="custom-control-label">In-Active</span>
+                            </label>
+
+                            {% else %}
+
+                            <label class="custom-control custom-control-primary custom-radio">
+                              <input class="custom-control-input" type="radio" name="is_active" value="True"  />
+                              <span class="custom-control-indicator"></span>
+                              <span class="custom-control-label">Active</span>
+                            </label>
+
+                            <label class="custom-control custom-control-primary custom-radio">
+                              <input class="custom-control-input" type="radio" name="is_active" value="False" checked="checked"/>
+                              <span class="custom-control-indicator"></span>
+                              <span class="custom-control-label">In-Active</span>
+                            </label>
+
+                            {% endif %}
+
+
+                          </div>
+                        </div> -->
+                        <div class="form-group">
+                          <label class="col-sm-3 col-md-4 control-label">Description : </label>
+                          <div class="col-sm-6 col-md-4">
+                            <textarea id=""  name= "des" class="form-control" rows="6" required>{{product.description}}</textarea>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-3 col-md-4 control-label">More Info : </label>
+                          <div class="col-sm-6 col-md-4">
+                            <textarea id="" name="more_info" class="form-control" rows="6" required>{{product.more_info}}</textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-12 mt-2 text-center">
+                          <!-- <a href="{{backurl}}" class="btn btn-default">Back</a> -->
+                          <button type="submit" class="btn btn-success">Save</button>
+                          <a id="next-img" class="btn btn-info">Next</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="mainimage">
+                    <div class="col-sm-12 col-md-12">
+                      <div class="demo-form-wrapper m-t-lg">
+                        <div class="col-sm-12 col-md-12">
+                          <div class="form-group">
+                            <div class="col-md-4 col-md-offset-4 text-center">
+                              <label class="form-label">Select Product Main Image <br><small class="text-info">(Dimension should be : 900 X 1200 px (3:4 ratio))</small></label> 
+                              <div class="pic-box">
+                                <div class="logoImg" style="width: 100px; margin: 0 auto">
+                                 
+                                 {% if product.main_img %}
+
+                                 <img src="{{product.main_img.url}}" id="result1">
+
+                                 {% else %}
+
+                                 <img src="/media/img/img-dummy-product.jpg" id="result1">
+                                 {% endif %}
+                                 <input id="logo-file" name="main_img" type="file" class="hide">
+                                 <label for="logo-file" class="btn btn-large"></label>
+                                </div>
+                              </div>
+                              <div class="col-sm-12 col-md-12 mt-2 text-center m-t-lg">
+                                <a id="pre-gen" class="btn btn-default">Previous</a>
+                                <button type="submit" class="btn btn-success">Save</button>
+                                <a id="next-cat" class="btn btn-info">Next</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="categories">
+                    <div class="form-group m-t-lg">
+                      <label class="col-sm-3 col-md-4 control-label">Category : </label>
+                      <div class="col-sm-6 col-md-4">
+                        <select class="form-control"  name="category" id ="category" selectedcat = {{product.category.id}} required>
+                          <option value="">--select category--</option>
+                          {% for category in categories %}
+                          <option id ="{{category.id}}" value="{{category.id}}">{{category.cat_name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 col-md-4 control-label">Sub-Category : </label>
+                      <div class="col-sm-6 col-md-4">
+                        <select name="subcategory" class="form-control" selectedsubcat = {{product.subcategory.id}} id="subcategory" required>
+                        {% for subcategory in subcategories %}
+                        {{subcategory.subcat_name}}
+                        <option id ="{{subcategory.id}}" value="{{subcategory.id}}">{{subcategory.subcat_name}}</option>
+                        
+                        {% endfor %}
+                        
+                        
+                       
+                      </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 col-md-4 control-label">Sub-Sub-Category : </label>
+                      <div class="col-sm-6 col-md-4">
+                        <select name="subsubcategory" class="form-control" selectedsubsubcat = {{product.subsubcategory.id}} id="subsubcategory" required>
+                             {% for subsubcategory in subsubcategories %}
+
+                        <option id ="{{subsubcategory.id}}" value="{{subsubcategory.id}}">{{subsubcategory.subsubcat_name}}</option>
+                        
+                        {% endfor %}
+                        
+                      </select>
+                      </div>
+                    </div>
+
+                    {% if request.COOKIES.role != '2' %}
+
+                    <div class="form-group">
+                      <label class="col-sm-3 col-md-4 control-label">Your Category (Select from your own categories) : </label>
+                      <div class="col-sm-6 col-md-4">
+                        <select name="owncategory" class="form-control" selectedowncat="{{product.usercategory.id}}" id="owncategory" >
+                         <option value="" ></option>
+
+                        {% for owncategory in ownCategories %}
+                          <option id="{{owncategory.id}}" value="{{owncategory.id}}">{{owncategory.name}}</option>
+                        {% endfor%}
+                        </select>
+
+                      </div>
+                    </div>
+
+                    {% endif %}
+                    <div class="col-sm-12 col-md-12 mt-2 text-center">
+                      <a id="pre-img" class="btn btn-default">Previous</a>
+                      <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'admin-interface/footer.html' %}
+
+<script>
+
+
+  $(document).ready(function(){
+
+            var date = new Date(); 
+            $("#startdate").datepicker({
+
+                todayBtn:  1,
+                autoclose: true,
+                startDate: date
+                
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $('#enddate').datepicker('setStartDate', minDate);
+            });
+
+            $("#enddate").datepicker({
+                todayBtn:  1,
+                autoclose: true,
+            }).on('changeDate', function (selected) {
+                 var maxDate = new Date(selected.date.valueOf());
+                 $('#startdate').datepicker('setEndDate', maxDate);
+            });
+        });
+
+
+
+  function hide_error(){
+
+    setTimeout(function(){
+
+        $("#js_error_msg").empty()
+
+     }, 10000);
+
+  }
+
+  function check_input_fields(name,error_msg){
+
+    if($('[name="'+name+'"]').val().trim()==''){
+
+       $("#js_error_msg").text(error_msg);
+       window.scrollTo(0, 0);
+       hide_error() 
+       return fasle;
+
+
+    }
+    
+
+  }
+
+  function instant_hide_error(){
+    $("#js_error_msg").empty()
+
+    }
+
+  $('#next-img').click(function(){
+    check_input_fields('name','Product name is required');
+    check_input_fields('material','Product material type is required');
+    // check_input_fields('new_from','Set Product as new is required');
+    // check_input_fields('new_to','Set Product as new is required');
+    check_input_fields('fit','Product fit is required');
+    check_input_fields('pattern','Product pattern is required');
+    check_input_fields('des','Product description is required');
+    check_input_fields('more_info','Product more_info is required');
+
+
+    instant_hide_error()
+
+    $("#img-tab").trigger("click");
+
+
+  });
+
+  $('#pre-gen').click(function(){
+    $("#gen-tab").trigger("click");
+  });
+  $('#next-cat').click(function(){
+
+    instant_hide_error()
+
+    $("#cat-tab").trigger("click");
+  });
+
+  $('#pre-img').click(function(){
+    $("#img-tab").trigger("click");
+  });
+
+  
+ $( "#category" ).change(function() {
+
+    var cat_id = $('#category').find(":selected").val();
+    if (cat_id==null||cat_id==''){
+
+      return false;
+    }
+    console.log(cat_id)
+    $.ajax(
+    {
+        type:"GET",
+        url: "/api/v1/product/subcategory/"+cat_id,
+
+      success: function( data ) 
+        {   
+ 
+            console.log(data)
+            //$('#subcategory').empty()
+            var str = "";
+          str += "<option></option>";
+
+            for (i = 0; i < (data.length); i++) {
+                
+                var subcat_name = data[i].subcat_name;
+                var category_id = data[i].category;
+                var id = data[i].id;
+
+
+                str += '<option id="'+category_id+'" value="'+id+'">'+subcat_name+'</option>';
+                  
+           } 
+           $('#subcategory').html(str);
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+ 
+});
+
+
+ $( "#subcategory" ).change(function() {
+
+    var subcat_id = $('#subcategory').find(":selected").val();
+    var cat_id = $('#category').find(":selected").val();
+
+    $.ajax(
+    {
+      type:"GET",
+      url: "/api/v1/product/subsubcategory/"+cat_id +"/"+subcat_id,
+
+      success: function( data ) 
+        {
+          console.log(data)
+          //$('#subsubcategory').empty()
+          var str = "";
+          str += "<option></option>";
+          for (i = 0; i < (data.length); i++) {
+            var subsubcat_name = data[i].subsubcat_name;
+            var id = data[i].id;
+
+            
+              str += '<option value="'+id+'">'+subsubcat_name+'</option>';
+            
+           }
+           $('#subsubcategory').html(str);
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+      }
+       
+     })
+ 
+});
+
+
+
+
+
+var category = $('#category').attr('selectedcat');
+$('#category option[id="' + category + '"]').prop('selected', true);
+
+
+var subcategory = $('#subcategory').attr('selectedsubcat');
+$('#subcategory option[id="' + subcategory + '"]').prop('selected', true);
+
+
+var subsubcategory = $('#subsubcategory').attr('selectedsubsubcat');
+$('#subsubcategory option[id="' + subsubcategory + '"]').prop('selected', true);
+
+
+var owncategory = $('#owncategory').attr('selectedowncat');
+$('#owncategory option[id="' + owncategory + '"]').prop('selected', true);
+
+
+</script>
+    <script>
+
+ 
+    $(document).ready(function(){
+
+
+      $(document).on("change",".gal-file",function(e2) {
+        var img1 = e2.target.files[0];
+        //alert(e2.target);
+        if(!iEdit.open(img1, true, function(res1){
+        console.log(res1)
+        $(e2.target).parent().find(".gal-result").attr("src", res1);  
+        })){
+        alert("Whoops! That is not an image!");
+        }
+      });
+    
+               $("#logo-file").change(function(e){
+                var img = e.target.files[0];
+                if(!iEdit.open(img, true, function(res){
+                 $("#result1").attr("src", res);      
+                })){
+                  alert("Whoops! That is not an image!");
+                }
+               });
+               $(document).on("click",".add-facility .plus-btn",function() {
+                $('.add-facility .facility-box').append('\
+                   <div class="col-md-6">\
+                    <input id="" class="form-control" type="date">\
+                    <span class="del">x</span>\
+                   </div>');
+                  $(".add-facility .del").on('click',function(){
+                    $(this).parent('.col-md-6').remove();
+                  });
+              });
+              });
+
+    </script>
+
+
+    <script >
+      
+      setTimeout(function(){
+
+        $("#error_msg").empty()
+
+     }, 10000);
+    </script>
+
+

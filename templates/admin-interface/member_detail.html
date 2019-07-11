@@ -1,0 +1,340 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+
+
+<style>
+  .datepicker.dropdown-menu {
+     width: 237px;
+    padding: 1.07143em 1.78571em;
+    -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    right: 0 !important;
+    }
+  .datepicker tbody {
+    color: #666; }
+  .datepicker table tr td span.active,
+  .datepicker table tr td span.active:hover,
+  .datepicker td .month.active {
+    background: #1976d2 !important; }
+  .datepicker td.active,
+  .datepicker td.selected {
+    background: #1976d2 !important; }
+    .default input[type=text] {
+    border: 1px solid #cad6e2;
+      border-radius: 5px;
+    }
+</style>
+    <div class="user4Page ExplorerListPage">
+        <div class="layout-content">
+            <div class="layout-content-body">
+                <div class="title-bar">
+                    <h1 class="title-bar-title">
+                      <span class="d-ib">{{usertype}} Management</span>
+                    </h1>
+                </div>
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                        <div class="panel m-b-lg">
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#home-11" data-toggle="tab">General Info</a></li>
+                            <li><a href="#profile-11" data-toggle="tab">Report</a></li>
+                            <li><a href="#profile-12" data-toggle="tab">Permissions</a></li>
+                          </ul>
+                          <div class="tab-content">
+                            <div class="tab-pane fade active in" id="home-11">
+                              
+                              <div class="col-sm-12 col-md-12">
+                                <div class="demo-form-wrapper">
+                                    <form class="form form-horizontal member-mngmnt">
+                                      <div class="col-sm-2 col-md-2">
+
+                                        <div class="form-group">
+                                         <div class="col-md-12 add-pic">
+                                          <label class=" control-label">Profile Image</label>
+                                          <div class="pic-box">
+                                            <div class="logoImg">
+                                              <a href="/admin/users/edit_member/{{userdata.role_id}}/{{userdata.id}}" >
+
+
+                                            {% if userdata.profileimg %}
+                                            
+                                            <img src="{{userdata.profileimg.url}}" id="result1">
+
+                                            {% else %}  
+
+                                             <img src="/media/img/3002121059.jpg" id="result2">
+                                             {% endif %}
+
+                                             <!-- <input id="logo-file" type="file" class="hide"> -->
+                                             <label for="logo-file" class="btn btn-large"></label>
+                                             </a>
+                                            </div>
+                                          </div>
+                                         </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-sm-8 col-md-8">
+
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                          <label class=" control-label">First Name</label>
+                                          <input id="" value="{{userdata.user.first_name|default_if_none:''}}" class="form-control rdonly" type="text" readonly >
+                                         </div>
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Last Name</label>
+                                          <input id="" value="{{userdata.user.last_name|default_if_none:''}}" class="form-control rdonly" type="text" readonly>
+                                         </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Role</label>
+                                          <input id="" value="{{usertype}}" class="form-control rdonly" type="text" readonly >
+                                         </div>
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Gender</label><br>
+
+                                          {% if userdata.gender == "male" %}
+
+
+                                           <label class="custom-control custom-control-primary custom-radio">
+                                            <input class="custom-control-input" type="radio" name="gender" value="all" checked="checked">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-label">Male</span>
+                                          </label>
+
+                                          <label class="custom-control custom-control-primary custom-radio">
+                                            <input class="custom-control-input" type="radio" name="gender" value="none" disabled>
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-label">Female</span>
+                                          </label>
+
+                                          {% else %}
+                                          <label class="custom-control custom-control-primary custom-radio">
+                                            <input class="custom-control-input" type="radio" name="gender" value="all" disabled>
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-label">Male</span>
+                                          </label>
+
+                                          <label class="custom-control custom-control-primary custom-radio">
+                                            <input class="custom-control-input" type="radio" name="gender" value="none"  checked="checked">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-label">Female</span>
+                                          </label>
+                                          
+
+                                         {% endif %}
+
+                                         </div>
+                                        </div>
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Email ID</label>
+                                          <input id="" value=" {{userdata.user.email|default_if_none:''}}" class="form-control rdonly" type="email" readonly >
+                                         </div>
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Rating</label>
+                                          <div class="product-rating" style="margin-top: 7px;">
+                                          {% if userdata.rating  %}
+                                                {% for i in "x"|rjust:userdata.rating %}
+                                                    <span class="icon icon-star active"></span>
+                                                {% endfor %}
+                                          {% endif %}
+
+                                          </div>
+                                         </div>
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Mobile</label>
+                                          <input id="" value="{{userdata.phonenum|default_if_none:''}}" class="form-control rdonly" type="text" readonly>
+                                         </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label for="about" class=" control-label">Address</label>
+                                            <textarea id="" class="form-control rdonly" rows="3" readonly>{{userdata.addr_one|default_if_none:''}} {{userdata.addr_two|default_if_none:''}} {{userdata.addr_three|default_if_none:''}}</textarea>
+                                          </div>
+                                        </div>
+                                      
+                                         <div class="form-group">
+                                              <div class="col-sm-12 col-md-12 addnew-btn">
+                                                  <a href="/admin/users/edit_member/{{userdata.role_id}}/{{userdata.id}}" class="btn btn-primary">Edit</a>
+                                                   <a href="/admin/users/{{url}}" class="btn btn-default">Back</a>
+                                              </div>
+                                          </div>
+
+                                      </div>
+                                    </form>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="profile-11">
+                              <div class="col-md-3 col-md-offset-1">
+                                <div class="panel panel-success" style="border: 1px solid #4ea773;    border-radius: 3px;">
+                                  <div class="panel-heading">% Settlement</div>
+                                  <div class="panel-body" style="padding: 42px;">
+                                    <h3 class="text-success text-center">10 %</h3>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="panel panel-success" style="border: 1px solid #4ea773;    border-radius: 3px;">
+                                  <div class="panel-heading">Money Generated</div>
+                                  <div class="panel-body">
+                                    
+                                    <div class="dafault21" style="width: 50%; float: left">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                              <label class="cl-gr">From</label>
+                                              
+                                              <input type="text" class="form-control datepicker" value="" id="startdate" style="padding: 0 10px;"> 
+                                              <div class="input-group-append">
+                                                  <div class="input-group-text ml-2">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <div class="dafault21 tb-to" style="width: 50%; float: left">
+                                      <div class="form-group">
+                                          <div class="input-group">
+                                              <label class="cl-gr">To</label>
+                                              <input type="text" class="form-control datepicker" value="" id="enddate" style="padding: 0 10px;">
+                                              <div class="input-group-append">
+                                                  <div class="input-group-text ml-2">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+
+                                    <h3 class="text-success text-center">Rs 5999</h3>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="panel panel-success" style="border: 1px solid #4ea773;    border-radius: 3px;">
+                                  <div class="panel-heading">Money Generated (Video Chat)</div>
+                                  <div class="panel-body">
+                                    
+                                    <div class="dafault21" style="width: 50%; float: left">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                              <label class="cl-gr">From</label>
+                                              <input type="text" class="form-control datepicker" value="" id="startdate11" style="padding: 0 10px;"> 
+                                              <div class="input-group-append">
+                                                  <div class="input-group-text ml-2">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <div class="dafault21 tb-to" style="width: 50%; float: left">
+                                      <div class="form-group">
+                                          <div class="input-group">
+                                              <label class="cl-gr">To</label>
+                                              <input type="text" class="form-control datepicker" value="" id="enddate11" style="padding: 0 10px;">
+                                              <div class="input-group-append">
+                                                  <div class="input-group-text ml-2">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <h3 class="text-success text-center">Rs 5999</h3>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 text-center">
+                                <a href="/admin/users/{{url}}" class="btn btn-primary">Back</a>
+                              </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="profile-12">
+
+                              {% if permissions %}
+                              
+                              {% for obj in permissions %}
+
+                              <div class="col-md-4">
+                                <div class="panel">
+                                  <h5 style="text-decoration : underline;">{{obj.name |title}} Management</h5>
+                                  <h6 class="text-success">Accessible functionalities</h6>
+                                  <p>{{obj.des}} </p>
+                                </div>
+                              </div>
+
+                              {% endfor %}
+
+                              {% else %}
+
+                              <div class="tab-pane" id="profile-14">
+                                <h4>No Permissions Found</h4>
+                              </div>
+
+                              {% endif %}
+
+                              <div class="col-md-12 text-center">
+                                <a href="/admin/users/{{url}}" class="btn btn-primary">Back</a>
+                              </div>
+                              
+                            </div>
+
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% include 'admin-interface/footer.html' %}
+
+
+
+
+
+<script type="text/javascript">
+          $(document).ready(function(){
+            $("#startdate").datepicker({
+                todayBtn:  1,
+                autoclose: true,
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $('#enddate').datepicker('setStartDate', minDate);
+            });
+
+            $("#enddate").datepicker()
+                .on('changeDate', function (selected) {
+                 var maxDate = new Date(selected.date.valueOf());
+                 $('#startdate').datepicker('setEndDate', maxDate);
+            });
+        });
+ 
+
+</script>
+
+
+
+<script type="text/javascript">
+          $(document).ready(function(){
+            $("#startdate11").datepicker({
+                todayBtn:  1,
+                autoclose: true,
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $('#enddate11').datepicker('setStartDate', minDate);
+            });
+
+            $("#enddate11").datepicker()
+                .on('changeDate', function (selected) {
+                 var maxDate = new Date(selected.date.valueOf());
+                 $('#startdate11').datepicker('setEndDate', maxDate);
+            });
+        });
+ 
+
+</script>
+

@@ -1,0 +1,12 @@
+Log whatever you want
+Log whatever you want
+Log whatever you want
+Log whatever you want
+Log whatever you want
+Log whatever you want
+Log whatever you want
+Log whatever you want
+<QueryDict: {'coupon_off': ['0'], 'saved_amount': ['1022'], 'item': ['2'], 'shipping_charges': ['0'], 'is_card_save': ['true'], 'cart': ['17'], 'source_token': ['tok_1EjmOxKEophbZQ2n2RI93Z8y'], 'grand_total': ['122'], 'payment': ['1'], 'is_coupon_applied': ['false'], 'address': ['2'], 'currency': ['usd'], 'coupon_code': [''], 'price': ['1134']}>
+<QueryDict: {'coupon_off': ['0'], 'saved_amount': ['1022'], 'item': ['2'], 'shipping_charges': ['0'], 'is_card_save': ['true'], 'cart': ['17'], 'source_token': ['tok_1EjmOxKEophbZQ2n2RI93Z8y'], 'grand_total': ['122'], 'payment': ['1'], 'is_coupon_applied': ['false'], 'address': ['2'], 'currency': ['usd'], 'coupon_code': [''], 'price': ['1134']}>
+<QueryDict: {'payment': ['2'], 'coupon_off': ['0'], 'source_token': ['tok_1EjmOxKEophbZQ2n2RI93Z8y'], 'currency': ['usd'], 'coupon_code': [''], 'cart': ['17'], 'price': ['1134'], 'is_card_save': ['true'], 'grand_total': ['122'], 'shipping_charges': ['0'], 'address': ['2'], 'is_coupon_applied': ['false'], 'item': ['2'], 'saved_amount': ['1022']}>
+<QueryDict: {'source_token': ['tok_1EjmOxKEophbZQ2n2RI93Z8y'], 'payment': ['2'], 'address': ['2'], 'saved_amount': ['1022'], 'is_coupon_applied': ['false'], 'coupon_code': [''], 'cart': ['17'], 'item': ['2'], 'coupon_off': ['0'], 'price': ['1134'], 'grand_total': ['122'], 'shipping_charges': ['0'], 'currency': ['usd'], 'is_card_save': ['true']}>

@@ -1,0 +1,586 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+
+
+
+    <div class="user4Page ExplorerListPage">
+        <div class="layout-content">
+            <div class="layout-content-body">
+                <div class="title-bar">
+                    <h1 class="title-bar-title">
+                      <span class="d-ib">User Management</span>
+                    </h1>
+                </div>
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                        <div class="panel m-b-lg">
+                          <ul class="nav nav-tabs nav-justified">
+                            <li class="active"><a href="#home-11" data-toggle="tab">General Info</a></li>
+                            <li><a href="#profile-11" data-toggle="tab">Addresses</a></li>
+                            <li><a href="#profile-12" data-toggle="tab">Wishlist</a></li>
+                            <li><a href="#profile-15" data-toggle="tab">Cart</a></li>
+                            <li><a href="#profile-13" data-toggle="tab">Recent Orders</a></li>
+                            <li><a href="#profile-14" data-toggle="tab">3D View</a></li>
+                          </ul>
+                          <div class="tab-content">
+                            <div class="tab-pane fade active in" id="home-11">
+                              
+                              <div class="col-sm-12 col-md-12">
+                                <div class="demo-form-wrapper">
+                                    <form class="form form-horizontal">
+                                      <div class="col-sm-2 col-md-2">
+
+                                        <div class="form-group">
+                                         <div class="col-md-12 add-pic">
+                                          <label class=" control-label">Profile Images</label>
+                                          <div class="pic-box">
+                                            <div class="logoImg">
+
+
+                                            {% if userdata.profileimg %}
+                                            
+                                            <img src="{{userdata.profileimg.url}}" id="result1">
+
+                                            {% else %}  
+
+                                             <img src="/media/img/3002121059.jpg" id="result2">
+                                             {% endif %}
+
+                                             <!-- <input id="logo-file" type="file" class="hide"> -->
+                                             <!--label for="logo-file" class="btn btn-large"></label-->
+                                            </div>
+                                          </div>
+                                         </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-sm-8 col-md-8">
+
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                          <label class=" control-label">First Name</label>
+                                          <input id="" value="{{userdata.user.first_name|default_if_none:''}}" class="form-control" type="text" readonly>
+                                         </div>
+
+
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Last Name</label>
+                                          <input id="" value="{{userdata.user.last_name|default_if_none:''}}" class="form-control" type="text" readonly>
+                                         </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Mobile</label>
+                                          <input id="" value="{{userdata.phonenum|default_if_none:''}}"  class="form-control" type="text" readonly>
+                                         </div>
+                                         <div class="col-md-6">
+
+                                          <label class=" control-label">Gender</label><br>
+
+                                          {% if userdata.gender == "male" %}
+
+
+                                           <label class="custom-control custom-control-primary custom-radio">
+                                            <input class="custom-control-input" type="radio" name="gender" value="all" checked="checked">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-label">Male</span>
+                                          </label>
+
+                                          <label class="custom-control custom-control-primary custom-radio">
+                                            <input class="custom-control-input" type="radio" name="gender" value="none" disabled>
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-label">Female</span>
+                                          </label>
+
+                                          {% else %}
+                                          <label class="custom-control custom-control-primary custom-radio">
+                                            <input class="custom-control-input" type="radio" name="gender" value="all" disabled>
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-label">Male</span>
+                                          </label>
+                                          
+                                          <label class="custom-control custom-control-primary custom-radio">
+                                            <input class="custom-control-input" type="radio" name="gender" value="none" checked="checked">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-label">Female</span>
+                                          </label>
+                                          
+
+                                         {% endif %}
+        
+                                         </div>
+                                        </div>
+                                        <div class="form-group">
+                                         <div class="col-md-6">
+                                          <label class=" control-label">Email ID</label>
+                                          <input id="" class="form-control" type="email" readonly value="{{userdata.user.email|default_if_none:''}}">
+                                         </div>
+                                         <div class="col-md-6">
+                                          <label class=" control-label">City</label>
+                                          <input id="" class="form-control" type="text" readonly value="{{userdata.region|default_if_none:''}}">
+                                         </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label for="about" class=" control-label">Address</label>
+                                            <textarea id="" class="form-control" rows="3" readonly>{{userdata.addr_one|default_if_none:''}} {{userdata.addr_two|default_if_none:''}} {{userdata.addr_three|default_if_none:''}}</textarea>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class=" col-sm-8  col-md-8 ">
+                                                <a href="/admin/users/user_list/" class="btn btn-primary">Back</a>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </form>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile-11">
+                              <div class="col-md-4 col-md-offset-1">
+                                <div class="well">
+                                  <h4>User Name</h4>
+                                  <p>Fluper Pvt Ltd, C-142, Sector 63, Noida, UP - 201301</p>
+                                  <h5>9876543210</h5>
+                                </div>
+                              </div>
+                              <div class="col-md-4 col-md-offset-2">
+                                <div class="well">
+                                  <h4>User Name</h4>
+                                  <p>Fluper Pvt Ltd, C-142, Sector 63, Noida, UP - 201301</p>
+                                  <h5>9876543210</h5>
+                                </div>
+                              </div><br>
+                              <div class="col-md-12 text-center">
+                                <a href="/admin/users/user_list/" class="btn btn-primary">Back</a>
+                              </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="profile-12">
+                              
+
+                              <div class="cart">
+                                <ul class="cart-list" style="display: flex; flex-wrap: wrap;">
+                                  <li class="cart-list-item" style="margin: 0 auto;">
+                                    <div class="cart-list-image">
+                                      <a href="product.html">
+                                        <img class="cart-list-thumbnail" src="https://www.kodefork.com/static/users/images/user.png" alt="Raja Elephant T-shirt">
+                                      </a>
+                                    </div>
+                                    <div class="cart-list-details">
+                                      <h4 class="cart-list-name">
+                                        <a href="product.html">Raja Elephant T-shirt Women's S-XL #4398</a>
+                                      </h4>
+                                      <p class="cart-list-description">
+                                        <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+                                      </p>
+                                      <div class="cart-list-actions">
+                                        <h6>Sold By : <strong>Eberjey </strong></h6>
+                                        <ul class="list-inline">
+                                          <li>Size : <strong>M</strong></li>
+                                          <li>
+                                            <span aria-hidden="true">|</span>
+                                          </li>
+                                          <li>Qty : <strong>1</strong></li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div class="cart-list-price">
+                                      <ul class="list-inline">
+                                        <li>
+                                          <del class="text-danger">$46.00</del>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                    <div class="cart-list-subtotal">$33.00</div>
+                                  </li>
+                                  
+                                  <li class="cart-list-item" style="margin: 0 auto;">
+                                    <div class="cart-list-image">
+                                      <a href="product.html">
+                                        <img class="cart-list-thumbnail" src="https://www.kodefork.com/static/users/images/user.png" alt="Raja Elephant T-shirt">
+                                      </a>
+                                    </div>
+                                    <div class="cart-list-details">
+                                      <h4 class="cart-list-name">
+                                        <a href="product.html">Raja Elephant T-shirt Women's S-XL #4398</a>
+                                      </h4>
+                                      <p class="cart-list-description">
+                                        <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+                                      </p>
+                                      <div class="cart-list-actions">
+                                        <h6>Sold By : <strong>Eberjey </strong></h6>
+                                        <ul class="list-inline">
+                                          <li>Size : <strong>M</strong></li>
+                                          <li>
+                                            <span aria-hidden="true">|</span>
+                                          </li>
+                                          <li>Qty : <strong>1</strong></li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div class="cart-list-price">
+                                      <ul class="list-inline">
+                                        <li>
+                                          <del class="text-danger">$46.00</del>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                    <div class="cart-list-subtotal">$33.00</div>
+                                  </li>
+                                  <li class="cart-list-item" style="margin: 0 auto;">
+                                    <div class="cart-list-image">
+                                      <a href="product.html">
+                                        <img class="cart-list-thumbnail" src="https://www.kodefork.com/static/users/images/user.png" alt="Raja Elephant T-shirt">
+                                      </a>
+                                    </div>
+                                    <div class="cart-list-details">
+                                      <h4 class="cart-list-name">
+                                        <a href="product.html">Raja Elephant T-shirt Women's S-XL #4398</a>
+                                      </h4>
+                                      <p class="cart-list-description">
+                                        <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+                                      </p>
+                                      <div class="cart-list-actions">
+                                        <h6>Sold By : <strong>Eberjey </strong></h6>
+                                        <ul class="list-inline">
+                                          <li>Size : <strong>M</strong></li>
+                                          <li>
+                                            <span aria-hidden="true">|</span>
+                                          </li>
+                                          <li>Qty : <strong>1</strong></li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div class="cart-list-price">
+                                      <ul class="list-inline">
+                                        <li>
+                                          <del class="text-danger">$46.00</del>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                    <div class="cart-list-subtotal">$33.00</div>
+                                  </li>
+                                  
+                                </ul>
+                                <!-- <div class="cart-actions">
+                                  <button class="btn btn-default" type="submit">Continue shopping</button>
+                                  <button class="btn btn-primary" type="submit">Proceed to checkout</button>
+                                </div> -->
+                              </div>
+                              <div class="col-md-12 text-center">
+                                <a href="/admin/users/user_list/" class="btn btn-primary">Back</a>
+                              </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile-15">
+                              <div class="col-md-8">
+                                <div class="card" style="display: inline-block;">
+                                  <div class="col-md-3" style="padding-left: 0px;">
+                                    <img src="https://www.kodefork.com/static/users/images/user.png" style="width: 100%;">
+                                  </div>
+                                  <div class="col-md-7">
+                                    <h4>Product Name</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod.</p>
+                                    <h6>Sold By : Eberjey</h6>
+                                    <ul class="list-inline">
+                                      <li>Size : <strong>M</strong></li>
+                                      <li>Qty : <strong>1</strong></li>
+                                    </ul>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <h6 class="text-danger"><del>Rs. 899</del></h6>
+                                    <h4>Rs. 599</h4>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="payment-card">
+                                    <h4><strong>Price Details</strong></h4>
+                                    <table class="table">
+                                      <tbody>
+                                        <tr>
+                                          <td class="col-xs-9">Cart Total</td>
+                                          <td class="col-xs-3">Rs 599</td>
+                                        </tr>
+                                        <tr>
+                                          <td class="col-xs-9">Estimated Tax</td>
+                                          <td class="col-xs-3">Rs 33</td>
+                                        </tr>
+                                        <tr>
+                                          <td class="col-xs-9">Delivery Charges</td>
+                                          <td class="col-xs-3">
+                                            <span class="nowrap text-success">Free</span>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="col-xs-6">Total</td>
+                                          <td class="col-xs-6">
+                                            <span class="payment-total-amount" style="font-size: 14px;">Rs 632</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                              </div>
+                              <div class="col-md-12 text-center">
+                                <a href="/admin/users/user_list/" class="btn btn-primary">Back</a>
+                              </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="profile-13">
+                              <div class="col-md-9 col-md-offset-1">
+                                <div class="card" style="display: inline-block;">
+                                  <div class="col-md-3" style="padding-left: 0px;">
+                                    <img src="https://www.kodefork.com/static/users/images/user.png" style="width: 100%;">
+                                  </div>
+                                  <div class="col-md-7">
+                                    <h4>Product Name</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod.</p>
+                                    <h6>Sold By : Eberjey</h6>
+                                    <ul class="list-inline">
+                                      <li>Size : <strong>M</strong></li>
+                                      <li>Qty : <strong>1</strong></li>
+                                    </ul>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <h6 class="text-danger">Rs. 599</h6>
+                                    <h4>Rs. 599</h4>
+                                  </div>
+                                  <div class="col-md-12">
+                                    <h4 style="float: left;"><span class="text-success">Delivered</span><br><small>Placed on Wednesday, Feb 27</small></h4>
+                                    <h5 style="float: right;"><a href="">View Details</a></h5>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="profile-14">
+                              <h4>No data found</h4>
+                            </div>
+
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% include 'admin-interface/footer.html' %}
+
+    <div id="viewSeller" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Seller full detail</h4>
+          </div>
+          <div class="modal-body provider-detail">
+           <div class="row">
+            <div class="col-md-6">
+              <div class="card text-center">
+                <div class="card-image">
+                  <div class="overlay">
+                  </div>
+                </div>
+                <div class="card-avatar text-left">
+                  <a class="card-thumbnail rounded" style="width: 150px;height: 160px;overflow: hidden;" href="#">
+                    <img class="img-responsive" src="img/8447261358.jpg" alt="Instagram">
+                  </a>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-title text-left">Seller name</h3>
+                  <p class="card-text text-left">
+                    <span class="app-users">
+                     <span class="icon icon-map-marker"></span>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel harum sequi,
+                      
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <ul class="media-list">
+                        <li class="media">
+                          <div class="media-middle media-body">
+                            <h4 class="m-y-0">Phone number</h4>
+                            <small>987862254</small>
+                          </div>
+                        </li>
+                        <li class="media">
+                          <div class="media-middle media-body">
+                            <h4 class="m-y-0">Country</h4>
+                            <small>India</small>
+                          </div>
+                        </li>
+                        <li class="media">
+                          <div class="media-middle media-body">
+                            <h4 class="m-y-0">City</h4>
+                            <small>Delhi</small>
+                          </div>
+                        </li>
+                        <li class="media">
+                          <div class="media-middle media-body">
+                            <h4 class="m-y-0">Email</h4>
+                            <small>seller@gmail.com</small>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+           </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+    <div id="addUser" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Add new Sales representative</h4>
+          </div>
+          <div class="modal-body provider-detail">
+           <div class="row">
+            <div class="col-xs-12">
+             <form class="form form-horizontal">
+                  <div class="form-group">
+                      <div class="col-md-8">
+                          <label for="" class="control-label">Email ID</label>
+                          <input id="" class="form-control" type="text">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-md-8">
+                          <label for="" class="control-label">
+                          <a href="#">Generate password</a></label>
+                          <input id="" class="form-control" type="text">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class=" col-sm-8  col-md-8 ">
+                          <button class="btn btn-primary " type="submit">Save</button>
+                      </div>
+                  </div>
+              </form>  
+             </div> 
+           </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+    <div id="unblockUser" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <span class="text-success icon icon-times-circle icon-5x"></span>
+              <h3 class="text-success">Sure</h3>
+              <h4>Are you want to unblock this item?</h4>
+              <div class="m-t-lg">
+                <button class="btn btn-success" data-dismiss="modal" type="button">Continue</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+    <div id="deleteUser" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <span class="text-danger icon icon-times-circle icon-5x"></span>
+              <h3 class="text-danger">Danger</h3>
+              <h4>Are you want to delete this item</h4>
+              <div class="m-t-lg">
+                <button class="btn btn-danger" data-dismiss="modal" type="button">Continue</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+
+<div id="addNew" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Add New Sales Representative</h4>
+          </div>
+          <div class="modal-body provider-detail">
+           <div class="row">
+            <div class="col-xs-12">
+             <form class="form form-horizontal">
+                  <div class="form-group">
+                      <div class="col-md-6">
+                          <label for="Name" class="control-label">Name</label>
+                          <input id="" class="form-control" type="text">
+                      </div>
+                      <div class="col-md-6">
+                          <label for="Email" class="control-label">Email ID</label>
+                          <input id="" class="form-control" type="text">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-md-6">
+                          <label for="Phone" class="control-label">Phone</label>
+                          <input id="" class="form-control" type="text">
+                      </div>
+                       <div class="col-md-6">
+                          <label for="Password" class="control-label">Password</label>
+                          <input id="" class="form-control" type="text">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-sm-12 col-md-12 addnew-btn">
+                          <button class="btn btn-primary" type="submit">Save</button>
+                      </div>
+                  </div>
+              </form>  
+             </div> 
+           </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+    

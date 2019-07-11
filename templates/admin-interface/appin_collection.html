@@ -1,0 +1,428 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %} 
+
+    <div class="">
+        <div class="layout-content">
+            <div class="layout-content-body">
+                <div class="title-bar">
+                    <h1 class="title-bar-title">
+                      <span class="d-ib">My In App Profile</span>
+                    </h1>
+                </div>
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                        <div class="panel m-b-lg">
+                          <ul class="nav nav-tabs ">
+                            <li><a href="/admin/users/appin_profile/{{usertype}}">Basic Info</a></li>
+                            <li class="active"><a href="#home-11" data-toggle="tab">Collection</a></li>
+                          </ul>
+                          <div class="tab-content">
+                            <div class="tab-pane fade active in" id="home-11">
+
+                              <div class="col-sm-10 col-md-10">
+                                
+
+                                <div class="btn-group dropdown">
+                                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="modal" data-target="#addNew">
+                                    <span class="icon icon-plus icon-lg icon-fw"></span>
+                                    Add Section
+                                  </button>
+                                </div>
+
+                                {% if messages %}
+                                {% for message in messages %}
+                                <p class="text-{{message.tags}}" style="text-align: center;">{{message}}</p>
+                                 {% endfor %}
+                                {% endif %}
+
+                                  <form class="form form-horizontal">
+
+
+                                  {% for section in sections %}
+                                      
+                                    <div class="card">
+                                      <div class="card-header">
+                                        <div class="card-actions">
+                                          <button type="button" class="card-action card-toggler" title="Collapse"></button>
+                                          <button type="button" class="card-action card-reload" title="Reload"></button>
+                                        </div>
+                                        <strong >{{section.name}}</strong>
+                                      </div>
+                                      <div class="card-body">
+                                          <table class="table table-striped table-bordered table-nowrap dataTable" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Main Img</th>
+                                                    <th>Name</th>
+                                                    <th>Category</th>
+                                                    <th>Sub-Category</th>
+                                                    <th>Sub-Sub-Category</th>
+                                                    <th>Qty Sold</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+
+                                            {{section.product}}
+                                          {% for product in section.products %}
+                                            <tbody class="pro-list">
+                                              <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>
+                                                  {% if product.main_img %}
+                                                   <img src="{{product.main_img.url}}" style="height: 50px;" />
+
+                                                  {% else %}
+                                                  <img src="http://cdn.onlinewebfonts.com/svg/img_148071.png" style="height: 50px;" />
+                                                  }
+                                                  {% endif %}
+                                                </td>
+                                                <td>{{product.name}}</td>
+                                                <td>{{product.category.cat_name|default_if_none:''}}</td>
+                                                <td>{{product.subcategory.subcat_name|default_if_none:''}}</td>
+                                                <td>{{product.subsubcategory.subsubcat_name|default_if_none:''}}</td>
+                                                <td>{{product.qty_sold|default_if_none:'0'}}</td>
+                                                  <td>                                          
+                                                   <button class="btn btn-primary btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#edit" onClick="location='/admin/users/edit_product/{{ product.id }}?section_id={{section.id}}'">
+                                                    <span class="btn-label">
+                                                     <span class="icon icon-edit icon-lg icon-fw"></span>
+                                                    </span>
+                                                  </button>
+
+                                                   <button class="btn btn-danger btn-sm btn-labeled" type="button" data-toggle="modal"  data-target="#removeproduct" sectionid= {{section.id}} id="{{product.id}}" onclick="removeProduct(this.id)">
+                                                    <span class="btn-label">
+                                                     <span class="icon icon-trash icon-lg icon-fw"></span>
+                                                    </span>
+                                                  </button>
+                                                </td>
+                                              </tr>
+                                              
+                                            </tbody>
+                                            {% endfor %}
+
+                                        </table>
+                                      </div>
+                                      <div class="card-footer">
+                                        
+                                        <button class="btn btn-default btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#addProduct" id="{{section.id}}" onclick="addproduct(this.id, this.name)" type="button">Add Product</button>
+                                        
+                                        <button class="btn btn-primary btn-sm btn-labeled" data-toggle="modal" data-target="#editsection" name ="{{section.name}}" id="{{section.id}}" onclick="editsection(this.id, this.name)" type="button" >Edit Section</button>
+                                        
+                                        <button class="btn btn-danger btn-sm btn-labeled" data-toggle="modal" data-target="#deletesection" name ="{{section.name}}" id="{{section.id}}" onclick="deletesection(this.id, this.name)" type="button">Delete</button>
+
+                                      </div>
+                                    </div>
+
+                                    {% endfor %}
+
+                                  </form>
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    
+{% include 'admin-interface/footer.html' %}
+
+
+
+    <div id="addNew" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Add New Section</h4>
+          </div>
+          <div class="modal-body provider-detail">
+           <div class="row">
+            <div class="col-xs-12">
+
+
+             <form class="form form-horizontal" method="POST" enctype='multipart/form-data' action="/admin/users/section_create/">{% csrf_token%}
+                  <div class="form-group">
+                      <div class="col-md-12">
+                          <label for="Name" class="control-label">Title</label>
+                          <input id="" style="text-transform: uppercase;" name = "name"  value="" class="form-control" type="text" required>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-sm-12 col-md-12 addnew-btn">
+                          <button class="btn btn-primary" type="submit">Save</button>
+                      </div>
+                  </div>
+              </form> 
+             </div> 
+           </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+    <div id="editsection" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Edit Section</h4>
+          </div>
+          <div class="modal-body provider-detail">
+           <div class="row">
+            <div class="col-xs-12">
+
+
+             <form class="form form-horizontal" id= "editsectionform" method="POST" enctype='multipart/form-data' action="" >{% csrf_token%}
+                  <div class="form-group">
+                      <div class="col-md-12">
+                          <label for="Name" class="control-label">Title</label>
+                          <input style="text-transform: uppercase;" id="editname" name = "name"  value="" class="form-control" type="text" required>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-sm-12 col-md-12 addnew-btn">
+                          <button class="btn btn-primary" type="submit">Save</button>
+                      </div>
+                  </div>
+              </form> 
+
+
+             </div> 
+           </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+    <div id="addProduct" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Select product</h4>
+          </div>
+          <div class="modal-body provider-detail">
+           <div class="row">
+            <div class="col-xs-12">
+              
+               <form class="form form-horizontal">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                      <a  href="" id="selectExistingProduct" class="btn btn-primary btn-block" >Select Existing Products</a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                      <a href="" id="addNewProduct" target="_blank" class="btn btn-primary btn-block">Add New Product</a>
+                    </div>
+                </div>
+              </form>  
+             </div> 
+           </div>
+          </div>
+        </div>
+      </div>      
+    </div>
+
+    <div id="deleteimg" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <span class="text-danger icon icon-times-circle icon-5x"></span>
+              <h3 class="text-danger">Delete</h3>
+              <h4>Are you sure, you want to delete this image</h4>
+              <div class="m-t-lg">
+                <button class="btn btn-danger" id="img_id" data-dismiss="modal" type="button" imgid = "" onclick="deleteUserFunction()" />Continue</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+    <div id="deletesection" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <span class="text-danger icon icon-times-circle icon-5x"></span>
+              <h3 class="text-danger">Delete</h3>
+              <h4>Are you sure, you want to delete this Section</h4>
+              <div class="m-t-lg">
+                <button class="btn btn-danger" id="deletesection_id" data-dismiss="modal" type="button" sectionid = "" onclick="deletesectionFunction()" />Continue</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+    <div id="removeproduct" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <span class="text-danger icon icon-times-circle icon-5x"></span>
+              <h3 class="text-danger">Remove</h3>
+              <h4>Are you sure, you want to remove this product from Section</h4>
+              <div class="m-t-lg">
+                <button class="btn btn-danger" id="removeproduct_id" data-dismiss="modal" type="button" productid = "" onclick="removeproductFunction()" />Continue</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+<script type="text/javascript">
+  
+
+
+  function editsection(clicked_id,sectionname){   
+    document.getElementById('editsectionform').setAttribute('action','/admin/users/section_edit/'+clicked_id) 
+    console.log(sectionname)
+    document.getElementById('editname').value = sectionname
+
+  };
+
+
+function addproduct(clicked_id){  
+    document.getElementById('selectExistingProduct').setAttribute('href' ,'/admin/users/section_select_product/'+clicked_id )
+
+    document.getElementById('addNewProduct').setAttribute('href' ,'/admin/users/add_product?section_id='+clicked_id )
+
+  };
+
+
+  function deletesection(clicked_id){   
+    document.getElementById('deletesection_id').setAttribute('sectionid', clicked_id)
+
+  };
+
+
+function deletesectionFunction(){
+    var id  = document.getElementById('deletesection_id').getAttribute("sectionid");
+    $.ajax(
+    {
+        type:"POST",
+        url: "/api/v1/admin/section/delete/"+id,
+        headers: { "X-CSRFToken":'{{csrf_token}}'},
+      
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+
+function removeProduct(clicked_id){   
+    document.getElementById('removeproduct_id').setAttribute('productid', clicked_id)
+
+  };
+
+
+function removeproductFunction(){
+    var id  = document.getElementById('removeproduct_id').getAttribute("productid");
+   var sectionid = new Array(document.getElementById(id).getAttribute('sectionid'));
+  console.log(sectionid)
+    $.ajax(
+    {
+        type:"POST",
+        url: "/api/v1/admin/section/product/remove/"+id,
+        headers: { "X-CSRFToken":'{{csrf_token}}'},
+        data: JSON.stringify({  
+                  'section_id' : sectionid
+                  
+              }),
+
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+      
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+
+
+</script>

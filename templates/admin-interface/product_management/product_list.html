@@ -1,0 +1,591 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+
+
+  <style>
+
+
+    /* Date Picker
+========================*/
+
+  .datepicker.dropdown-menu {
+     width: 237px;
+    padding: 1.07143em 1.78571em;
+    -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    right: 0 !important;
+    }
+  .datepicker tbody {
+    color: #666; }
+  .datepicker table tr td span.active,
+  .datepicker table tr td span.active:hover,
+  .datepicker td .month.active {
+    background: #1976d2 !important; }
+  .datepicker td.active,
+  .datepicker td.selected {
+    background: #1976d2 !important; }
+    .default input[type=text] {
+    border: 1px solid #cad6e2;
+      border-radius: 5px;
+    }
+    .default .input-group {
+      width: 100%;
+      display: block !important;
+      height: 30px;
+    }
+    .default label {
+      /*padding: 5px 9px 0px 0px;*/
+    }
+    .dafault21 {
+    /* width: 28%; */
+    /* width: 42%; */
+    width: 33%;
+    height: 20px;
+    margin-right: 13px;
+    display: inline-block;
+    }
+    .default{
+      position: relative;
+      padding-bottom: 30px;
+    }
+    .title-bar .form-group-lg .form-control {
+      height: 36px;
+      padding-left: 45px !important;
+      padding: 5px 15px;
+      font-size: 14px;
+      line-height: 1.333333;
+      border-radius: 0;
+      margin: 10px 0;
+    }
+    .title-bar .form-group-lg .input-with-icon .input-icon {
+      font-size: 18px;
+      height: 36px;
+      line-height: 56px;
+      width: 46px;
+    }
+
+  tbody.pro-list tr td ul{
+    list-style: none;
+    padding-left: 0px;
+  }
+  tbody.pro-list tr td ul li{
+    line-height: 15px;
+  }
+  tbody.pro-list tr td ul li span{
+    float: right;
+  }
+  .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    padding: 5px;
+  }
+  tbody.pro-list tr td .widget {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+tbody.pro-list tr td .card-body .btn-primary.btn-sm {
+    padding: 0;
+}
+tbody.pro-list tr td .widget .btn {
+    display: block;
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin: 5px !important;
+    padding: 0;
+    width: 20px;
+}
+
+
+</style>
+
+    <div class="responsiveTbPage ExplorerListPage">
+      <div class="layout-content">
+        <div class="layout-content-body">
+          <div class="title-bar">
+              <h1 class="title-bar-title">
+                <span class="d-ib">Product Management</span>
+              </h1>
+
+
+              <a href="/admin/users/add_product/" class="btn btn-default btn-sm" style="float: right; margin-bottom: 10px;" type="button"">
+                <span class="add-btn">Add Product</span>
+              </a>
+
+               {% if request.COOKIES.role != '2' %} 
+              <a href="/admin/users/add_category/" class="btn btn-default btn-sm" style="float: right; margin-right: 15px; margin-bottom: 10px;" type="button">
+                <span class="add-btn">Add Category</span>
+              </a>
+              {% endif %}
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="card">
+                <!-- <div class="card-header">
+                  <div class="card-actions">
+                    <button type="button" class="card-action card-toggler" title="Collapse"></button>
+                    <button type="button" class="card-action card-reload" title="Reload"></button>
+                    <button type="button" class="card-action card-remove" title="Remove"></button>
+                  </div>
+                </div> -->
+                <div class="card-body">
+
+                 
+                    <div class="row" style="position: relative;">
+
+                       <div class="col-md-9 col-sm-9 col-xs-12" style="position: absolute; top:-0.5%;  z-index: 999;">
+
+                        <form id= filter_date action="/admin/users/product_date_filter/{{request.COOKIES.role}}" style="width: 50%; float: left;">
+                          <div class="dafault21">
+                            <div class="form-group">
+                              <div class="input-group">
+                                <input  autocomplete="off" type="text" class="form-control datepicker" value="" id="startdate" style="padding: 0 10px 0 25px; border-radius: 0;" name='startdate' placeholder="From">
+                                <span class="icon icon-calendar input-icon" style="width: 25px;"></span>
+                                <div class="input-group-append">
+                                  <div class="input-group-text ml-2">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="dafault21 tb-to">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" autocomplete="off" class="form-control datepicker" value="" id="enddate" style="padding: 0 10px 0 25px; border-radius: 0;" name='enddate' placeholder="To">
+                                    <span class="icon icon-calendar input-icon" style="width: 25px;"></span>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text ml-2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+
+                          <button  style= "width:40px;height: 34px ;margin-top:0px" class="btn btn-default btn-sm btn-labeled" id ="filter-user" type="submit" data-toggle="modal" disabled="disabled">
+                            <span class="add-btn">
+                            <i class="fa fa-search"></i>
+                            </span>
+                          </button>
+
+                        </form>
+
+                        <form class="form form-inline" method ="POST" action=/admin/users/search_product style="width: 50%; float: left;">
+                          <div class="form-group">{% csrf_token %}
+                            <select class="form-control" name="category" id ="category" required>
+                               <option></option>
+                              {% for category in categories%}
+                              <option id ="{{category.id}}" value="{{category.id}}">{{category.cat_name}}</option>
+                              {% endfor %}
+                                                        
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <select class="form-control"  name="subcategory" id="subcategory" required>
+
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <select class="form-control" name="subsubcategory" id="subsubcategory" required>
+
+                            </select>
+                          </div>
+                          <button class="btn btn-primary" type="submit" ><i class="fa fa-search"></i></button>
+                        </form>
+                      </div>
+
+
+                  <div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+                    <table id="demo-datatables-5" class="table table-striped table-bordered table-nowrap dataTable" cellspacing="0" width="100%">
+                      <thead>
+                        <tr>
+                          <th class="clicksr cl_dis">#</th>
+                          <th class="cl_dis">Img</th>
+                          <th >Product name</th>
+                          <th class="cl_dis">Category</th>
+                          <th class="cl_dis">Sub-Category</th>  
+                          <th class="cl_dis">Sub-Sub Category</th>
+                          <th class="cl_dis">Added on</th>
+                          <th class="cl_dis">Status</th>
+                          <th class="cl_dis">Ratings</th>
+                          <th class="cl_dis">Action</th>
+                        </tr>
+                      </thead>
+
+                      <tbody class="pro-list">
+
+
+                        {% for product in products %}
+                          <tr>
+                              <td>{{forloop.counter}}</td>
+
+                              <td>
+                              {% if product.main_img %}
+                              <img src="{{product.main_img.url}}" style="height: 35px;">
+                                
+                              {% else %}
+
+                              <img src="http://cdn.onlinewebfonts.com/svg/img_148071.png" style="height: 35px;">
+
+                              {% endif %}
+
+                              </td>
+
+                              <td>{{product.name}}</td>
+                              <td>{{product.category.cat_name}}</td>
+                              <td>{{product.subcategory.subcat_name}}</td>
+                              <td>{{product.subsubcategory.subsubcat_name}}</td>
+                              <td>{{product.created_date| date:"M d, Y"}}</td>
+                              
+                              {% if product.active %}
+                               <td class="text-success">Active</td>
+                              {% else %}
+                               <td class="text-danger">Inactive</td>
+                              {% endif %}
+                              <td>
+                                <span class="app-rating">
+
+                                  {% if product.avg_rating  %}
+                                       {% for i in "x"|rjust:product.avg_rating%}
+                                            <span class="icon icon-star"></span>
+                                      {% endfor %}
+                                   {% endif %}
+
+                                </span>
+                              </td>
+                              <td>
+
+                                <label class="switch switch-primary">
+                                  {% if product.active %}
+                                  <input class="switch-input" name = "False" id ={{product.id}} onchange="changeStatusFunction(this.id,this.name)" type="checkbox" checked="checked">
+                                  {% else %}
+                                  <input class="switch-input" name = "True"  id ={{product.id}} type="checkbox"onchange="changeStatusFunction(this.id,this.name)">
+
+                                  {% endif %}
+                                  <span class="switch-track"></span>
+                                  <span class="switch-thumb"></span>
+                                </label>
+                                <br>
+                                <br>
+                                 <!-- <button class="btn btn-info btn-sm btn-labeled" type="button" data-toggle="modal" onClick="location='/admin/users/edit_product/{{ product.id }}'">
+                                  <span class="btn-label">
+                                   <span class="icon icon-edit icon-lg icon-fw"></span>
+                                  </span>
+                                </button> -->
+
+                                <button class="btn btn-primary btn-sm btn-labeled" type="button" data-toggle="modal" id ="{{ user.id }}"  data-target="#viewSeller" onClick="location='/admin/users/view_product/{{ product.id }}'">
+                                <span class="btn-label">
+                                 <span class="icon icon-eye icon-lg icon-fw"></span>
+                                </span>
+                                View Product
+                                </button>
+
+
+                                 <button class="btn btn-danger btn-sm btn-labeled" type="button" data-toggle="modal" id="{{product.id}}" onclick="deleteProduct(this.id)" data-target="#deletepdoduct">
+                                  <span class="btn-label">
+                                   <span class="icon icon-trash icon-lg icon-fw"></span>
+                                  </span>
+                                </button>
+                              </td>
+                          </tr>
+
+                      {% endfor %}  
+                          
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="deletepdoduct" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <span class="text-danger icon icon-times-circle icon-5x"></span>
+              <h3 class="text-danger">Danger</h3>
+              <h4>Are you sure, you want to delete this Product</h4>
+              <div class="m-t-lg">
+                <button class="btn btn-danger" id ="product_delete_id" product_id=""data-dismiss="modal" type="button" onclick="deleteProductFunction()" >Continue</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+
+{% include 'admin-interface/footer.html' %}
+
+
+
+<script type="text/javascript">
+         $(document).ready(function(){
+            $("#startdate").datepicker({
+                todayBtn:  1,
+                autoclose: true,
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $('#enddate').datepicker('setStartDate', minDate);
+            });
+
+            $("#enddate").datepicker({
+                todayBtn:  1,
+                autoclose: true,
+            }).on('changeDate', function (selected) {
+                 var maxDate = new Date(selected.date.valueOf());
+                 $('#startdate').datepicker('setEndDate', maxDate);
+            });
+        });
+
+
+</script>
+
+<script type="text/javascript">
+   $(document).ready(function(){
+      $(".clicksr").click();
+
+
+
+
+   })
+
+</script>
+
+<script type="text/javascript">
+  
+   function deleteProduct(clicked_id){   
+    document.getElementById('product_delete_id').setAttribute('product_id', clicked_id)
+    
+
+  };
+
+
+  function deleteProductFunction(){
+      var id  = document.getElementById('product_delete_id').getAttribute("product_id");
+
+    $.ajax(
+      {
+        type:"POST",
+        url: "/api/v1/admin/designer_stylist/product/delete/"+id,
+        headers: { "X-CSRFToken":'{{csrf_token}}'},
+
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+
+$('#filter_date').change(function() {
+
+    if ($('#startdate').val() != '' && $('#enddate').val() != '' ){
+      
+
+      $('#filter-user').prop('disabled', false);
+
+            }
+      else{
+
+        $('#filter-user').prop('disabled', true);
+      }
+
+
+})
+
+function changeStatusFunction(id ,status){
+
+      $.ajax(
+      {
+        type:"POST",
+        url: "/api/v1/admin/designer_stylist/product/status_change/"+id +"/"+status,
+        headers: { "X-CSRFToken":'{{csrf_token}}'},
+
+      success: function( data ) 
+        {   
+
+            alert(data.message)
+            window.location.reload();
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+   
+  };
+
+
+
+
+</script>
+<script type="text/javascript">
+  
+ $( "#category" ).change(function() {
+    
+    var cat_id = $('#category').find(":selected").val();
+
+ if (cat_id == ''){
+  return false;
+ }
+    $.ajax(
+    {
+        type:"GET",
+        url: "/api/v1/product/subcategory/"+cat_id,
+
+      success: function( data ) 
+        {   
+ 
+            console.log(data)
+            // $('#subcategory').empty()
+            var str = "";
+            str += "<option></option>";
+            for (i = 0; i < (data.length); i++) {
+                
+                var subcat_name = data[i].subcat_name;
+                var category_id = data[i].category;
+                var id = data[i].id;
+
+                
+
+                str += '<option id="'+category_id+'" value="'+id+'">'+subcat_name+'</option>';
+           } 
+           $('#subcategory').html(str);
+         
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+    }
+       
+     })
+ 
+});
+
+
+ $( "#subcategory" ).change(function() {
+
+    var subcat_id = $('#subcategory').find(":selected").val();
+    var cat_id = $('#category').find(":selected").val();
+
+
+    console.log(subcat_id,cat_id)
+
+    if (subcat_id==''){
+      return false;
+    };
+    $.ajax(
+    {
+      type:"GET",
+      url: "/api/v1/product/subsubcategory/"+cat_id +"/"+subcat_id,
+
+      success: function( data ) 
+        {
+          console.log(data)
+          //$('#subsubcategory').empty()
+          var str = "";
+          str += "<option></option>";
+          for (i = 0; i < (data.length); i++) {
+            var subsubcat_name = data[i].subsubcat_name;
+            var id = data[i].id;
+
+            
+              str += '<option value="'+id+'">'+subsubcat_name+'</option>';
+            
+           }
+           $('#subsubcategory').html(str);
+        },
+
+      statusCode: {
+        404: function(response) {
+            alert('404')
+        },
+        500: function(response) {
+            alert('500')
+        },
+        400: function(response) {
+            alert('400')
+        },
+      }
+       
+     })
+ 
+});
+
+</script>
+
+
+<script>
+  $(document).ready(function(){
+    //alert('hello');
+    $(".cl_dis").off("click");
+    $(".cl_dis").removeClass("sorting");
+    $(".cl_dis").removeClass("sorting_asc");
+    $(".cl_dis").removeClass("sorting_desc");
+
+
+
+    $(".cl_dis").click(function(){
+      $(this).off("click");
+    });
+
+    $("thead").on("click", function() {
+      //alert('started');
+
+      $(".cl_dis").off("click");
+
+      $(".cl_dis").removeClass("sorting");
+      $(".cl_dis").removeClass("sorting_asc");
+      $(".cl_dis").removeClass("sorting_desc");
+
+    });
+  });
+</script>

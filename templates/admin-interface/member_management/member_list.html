@@ -1,0 +1,60 @@
+<!-- 
+{% for obj in user_other_info %}
+     
+    role:<h4> {{obj.role}}</h4>
+    name:<h4>{{obj.userb.first_name}}</h4>
+
+
+
+{% endfor %}
+ -->
+
+<a href="{% url 'admin-home' %}?office=foobar">
+
+
+<form method="POST" action="/admin/users/member/" id ='FORM-ID'>
+	{% csrf_token%}
+
+<!-- {{form}} -->
+
+<input type="text" name="test"  id='BTN' value="1">
+
+<input type="submit" name="submit"  >
+</form>
+
+<input type="button" id='BTN-ID' name="submit">
+
+
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+
+
+<script type="text/javascript">
+    var frm = $('#FORM-ID');
+    console.log(frm)
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                alert('ok')
+                console.log(data)
+
+                
+            },
+            error: function(data) {
+                alert('notok')
+            }
+        });
+        return false;
+    });
+
+
+
+</script>
+
+
+
+
+
+

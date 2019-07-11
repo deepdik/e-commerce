@@ -1,0 +1,184 @@
+<!-- <form method="POST">
+	{% csrf_token%}
+{{form}}
+ssas
+
+<input type="submit" name="submit">
+</form>
+
+ -->
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %} 
+
+<div class="profilePage"></div>
+<div class="layout-content">
+    <div class="layout-content-body">
+        <div class="title-bar">
+
+            <h1 class="title-bar-title">
+              <span class="d-ib">Edit My Profile /</span>
+              <a href="/admin/users/admin_profile/">Back to list</a>
+            </h1>
+        </div>
+        <div class="row gutter-xs">
+            <div class="col-md-8 card panel-body" style="box-shadow: 0px 0px 14px #999;">
+                <div class="col-sm-12 col-md-12">
+                    <div class="demo-form-wrapper">
+
+                        <form class="form form-horizontal" action="/admin/users/admin_profile/edit" method="POST" enctype='multipart/form-data'>{% csrf_token%}
+
+                            <div class="form-group">
+                             <div class="col-md-6">
+                              <label class=" control-label">First Name</label>
+                              <input id="" class="form-control" name="firstname" value="{{firstname}}" type="text" required>
+                             </div>
+                             <div class="col-md-6">
+                              <label class=" control-label">Last Name</label>
+                              <input id="" class="form-control" value="{{lastname}}" name="lastname" type="text" required>
+                             </div>
+                            </div>
+
+                             <div class="form-group">
+                             <div class="col-md-6">
+                              <label class=" control-label">Email ID</label>
+                              <input id="email" class="form-control" name="email" value="{{email}}" type="email" autocomplete="off" data-msg-required="Please enter your email address." required>
+                              {% if form.errors %}
+          	
+           						<p style="color:red;">{{ form.email.errors.as_text |cut:"* "}}<p>
+            				{% endif %}
+                             </div>
+                             <div class="col-md-6">
+                              <label class=" control-label">Mobile</label>
+                              <input id="" class="form-control" value="{{phonenumber}}" name="phonenumber" type="text" data-msg-required="Phone number is required" required>
+                              {% if form.errors %}
+          						<br>
+           						<p style="color:red;">{{ form.phonenumber.errors.as_text |cut:"* "}}<p>
+            					{% endif %}
+                             </div>
+                            </div>
+
+                            <div class="form-group">
+                             <div class="col-md-6 add-pic">
+                              <label class=" control-label">Change Profile Images</label>
+                              <div class="pic-box">
+                                <div class="logoImg">
+
+                                {% if user_other_info.profileimg%}
+    							<img src="{{user_other_info.profileimg.url}}" id="result1">
+
+    							{% else %}
+
+    							 <img src="/media/img/3002121059.jpg" id="result1">
+    					
+
+								{% endif %}
+                                 
+                                 <input id="logo-file" name='profileimg' type="file" class="hide">
+                                 <label for="logo-file" class="btn btn-large"></label>
+                                </div>
+                              </div>
+                             </div>
+                            </div>
+
+                            <div class="form-group">
+                             <div class="col-md-6 add-pic">
+                              <label class=" control-label">Change Cover Images</label>
+                              <div class="pic-box">
+                                <div class="logoImg">
+
+                                 {% if user_other_info.coverimg%}
+    							<img src="{{user_other_info.coverimg.url}}" id="result2">
+
+    							{% else %}
+
+    							 <img src="/media/img/3002121059.jpg" id="result2">
+    					
+
+								{% endif %}
+                                 <input id="coverlogo-file" name='coverimg' type="file" class="hide">
+                                 <label for="coverlogo-file" class="btn btn-large"></label>
+                                </div>
+                              </div>
+                             </div>
+                            </div>
+
+                            <div class="form-group">
+                             <!-- <div class="col-md-6">
+                              <label class=" control-label">Gender</label>
+                              <input id="" name="gender" value="{{user_other_info.gender|default_if_none:''}}" class="form-control" type="text">
+                             </div> -->
+                             <div class="col-md-6">
+                              <label class=" control-label">Address</label>
+                              <input id="" value= "{{user_other_info.addr_one |default_if_none:''}} {{user_other_info.addr_two |default_if_none:''}} {{user_other_info.addr_three|default_if_none:''}}" class="form-control" name="address" type="text">
+                             </div>
+                            </div>
+
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label for="about"  class=" control-label">Description</label>
+                                <textarea id="" name="about" class="form-control" rows="3">{{user_other_info.about|default_if_none:''}}</textarea>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                                <div class=" col-sm-8  col-md-8 ">
+                                    <button class="btn btn-primary " type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% include 'admin-interface/footer.html' %}
+
+<script type="text/javascript">
+              $(document).ready(function(){
+               $("#logo-file").change(function(e){
+                var img = e.target.files[0];
+                if(!iEdit.open(img, true, function(res){
+                 $("#result1").attr("src", res);      
+                })){
+                  alert("Whoops! That is not an image!");
+                }
+               });
+               $(document).on("click",".add-facility .plus-btn",function() {
+                $('.add-facility .facility-box').append('\
+                   <div class="col-md-6">\
+                    <input id="" class="form-control" type="date">\
+                    <span class="del">x</span>\
+                   </div>');
+                  $(".add-facility .del").on('click',function(){
+                    $(this).parent('.col-md-6').remove();
+                  });
+              });
+              });
+
+              
+              $(document).ready(function(){
+               $("#coverlogo-file").change(function(e){
+                var img = e.target.files[0];
+                if(!iEdit.open(img, true, function(res){
+                 $("#result2").attr("src", res);      
+                })){
+                  alert("Whoops! That is not an image!");
+                }
+               });
+               $(document).on("click",".add-facility .plus-btn",function() {
+                $('.add-facility .facility-box').append('\
+                   <div class="col-md-6">\
+                    <input id="" class="form-control" type="date">\
+                    <span class="del">x</span>\
+                   </div>');
+                  $(".add-facility .del").on('click',function(){
+                    $(this).parent('.col-md-6').remove();
+                  });
+              });
+              });
+            </script>

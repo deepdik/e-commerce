@@ -1,0 +1,110 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+
+
+<style>
+  .product-images{
+    width: 40% !important;
+  }
+  .product-images img{
+    width: 100%;
+    height: auto;
+  }
+
+  .product-details{
+    width: 60% !important;
+  }
+  .product-attributes{
+    border-bottom: 1px dotted #2c3e50;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+  .product-images img {
+   
+    margin-top: 70px !important;
+}
+</style>
+
+      <div class="layout-content">
+        <div class="layout-content-body">
+          <div class="title-bar">
+            <h1 class="title-bar-title">
+              <span class="d-ib">View Product</span>
+              <span style="float: right;">
+                <a class="btn btn-info" href="/admin/users/edit_product/{{product.id}}">
+                  <span class="icon icon-edit"></span>
+                </a>
+                <a class="btn btn-default" href="/admin/users/add_product_varients/{{product.id}}">
+                  Add Variant
+                </a>
+                <a class="btn btn-default" href="/admin/users/view_product_varients/{{product.id}}">
+                  View Variant
+                </a>
+              </span>
+            </h1>
+          </div>
+
+          <div class="row gutter-xs">
+            <div class="col-xs-12">
+              <div class="panel m-b-lg">
+
+                <div class="product">
+                  <div class="product-images">
+                    <div class="flexslider">
+                       {% if product.main_img %} 
+                     <img src="{{product.main_img.url}}" id="result1">
+
+                     {% else %}
+                     <img src="/media/img/img-dummy-product.jpg" id="result1">
+                     
+                     {% endif %}
+                      
+                    </div>
+                  </div>
+                  <div class="product-details">
+                    <h2 class="product-name">{{product.name}}</h2>
+                    <div class="product-divider"></div>
+                    <h6><strong>Product Set As New :  </strong> &nbsp;&nbsp;&nbsp; <small><i class="icon icon-calendar"></i></small>&nbsp;&nbsp;{{product.new_from |default_if_none:'N/A'}}&nbsp;&nbsp;&nbsp; <strong>To</strong> &nbsp;&nbsp;&nbsp; <small><i class="icon icon-calendar"></i></small>&nbsp;&nbsp;{{product.new_to |default_if_none:'N/A'}}</h6>
+                    <div class="product-sku">
+                      <h6><strong>Main Category : </strong>{{product.category.cat_name}}</h6>
+                      <h6><strong>Sub Category : </strong>{{product.subcategory.subcat_name}}</h6>
+                      <h6><strong>Sub-Sub Category : </strong>{{product.subsubcategory.subsubcat_name}}</h6>
+
+                    {% if request.COOKIES.role != '2' %} 
+                      <h6>
+                        <strong>Your Category : </strong>{{product.usercategory.name|default:"N/A"}}
+                      </h6>
+                    {% endif %}
+
+                    </div>
+                    
+                    <div class="product-attributes">
+                      <div class="row">
+                        <div class="col-md-6"><strong>Material : </strong> {{product.material}}</div>
+                        <div class="col-md-6"><strong>Fit : </strong>{{product.fit|default:"N/A"}}</div>
+                        <div class="col-md-6"><strong>Pattern : </strong>{{product.pattern|default:"N/A"}}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="product-description">
+                      <h4>Product Description</h4>
+                      <p>{{product.description|default_if_none:'N/A'}}</p>
+
+                      <h4>Additional Info</h4>
+                      <p style="margin-bottom: 25px">{{product.more_info |default_if_none:'N/A'}}</p>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+{% include 'admin-interface/footer.html' %}

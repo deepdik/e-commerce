@@ -1,0 +1,234 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %} 
+
+    <div class="">
+        <div class="layout-content">
+            <div class="layout-content-body">
+                <div class="title-bar">
+                    <h1 class="title-bar-title">
+                      <span class="d-ib">My In App Profile</span>
+                    </h1>
+                </div>
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                        <div class="panel m-b-lg">
+                          <ul class="nav nav-tabs nav-justified">
+                            <li><a href="stylist-designer-inapp-basic.php">Basic Info</a></li>
+                            <li class="active"><a href="#home-11" data-toggle="tab">Collection</a></li>
+                          </ul>
+                          <div class="tab-content">
+                            <div class="tab-pane fade active in" id="home-11">
+
+                              <div class="col-sm-8 col-md-8">
+                                <button class="btn btn-default btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#addNew" style="margin-bottom: 15px;">Add Section</button>
+                                  <form class="form form-horizontal">
+                                    <div class="card">
+                                      <div class="card-header">
+                                        <div class="card-actions">
+                                          <button type="button" class="card-action card-toggler" title="Collapse"></button>
+                                          <button type="button" class="card-action card-reload" title="Reload"></button>
+                                        </div>
+                                        <strong>Latest Products</strong>
+                                      </div>
+                                      <div class="card-body">
+                                          <table class="table table-striped table-bordered table-nowrap dataTable" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Thumbnail</th>
+                                                    <th>Name</th>
+                                                    <th>Category</th>
+                                                    <th>Price</th>
+                                                    <th>Qty</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody class="pro-list">
+                                              <tr>
+                                                <td>1</td>
+                                                <td>
+                                                  <img src="http://cdn.onlinewebfonts.com/svg/img_148071.png" style="height: 50px;" />
+                                                </td>
+                                                <td>Lorem Ipsum</td>
+                                                <td>T-Shirt</td>
+                                                <td>Rs 899</td>
+                                                <td>100</td>
+                                                <td>                                             
+                                                   <button class="btn btn-primary btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#editUser">
+                                                    <span class="btn-label">
+                                                     <span class="icon icon-edit icon-lg icon-fw"></span>
+                                                    </span>
+                                                  </button>
+                                                   <button class="btn btn-danger btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#deleteUser">
+                                                    <span class="btn-label">
+                                                     <span class="icon icon-trash icon-lg icon-fw"></span>
+                                                    </span>
+                                                  </button>
+                                                </td>
+                                              </tr>
+                                              
+                                            </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="card-footer">
+                                        <button class="btn btn-default btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#addUser">Add Product</button>
+                                        <button class="btn btn-primary btn-sm btn-labeled" type="button">Edit Section</button>
+                                        <button class="btn btn-success btn-sm btn-labeled" type="button">Save</button>
+                                        <button class="btn btn-danger btn-sm btn-labeled" type="button">Delete</button>
+                                      </div>
+                                    </div>
+                                    <div class="card">
+                                      <div class="card-header">
+                                          <div class="card-actions">
+                                              <button type="button" class="card-action card-toggler" title="Collapse"></button>
+                                              <button type="button" class="card-action card-reload" title="Reload"></button>
+                                          </div>
+                                          <strong>New Arrivals</strong>
+                                      </div>
+                                      <div class="card-body">
+                                          <table class="table table-striped table-bordered table-nowrap dataTable" cellspacing="0" width="100%">
+                                            <thead>
+                                              <tr>
+                                                <th>#</th>
+                                                <th>Thumbnail</th>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Price</th>
+                                                <th>Qty</th>
+                                                <th>Action</th>
+                                              </tr>
+                                            </thead>
+
+                                            <tbody class="pro-list">
+                                              <tr>
+                                                <td>1</td>
+                                                <td>
+                                                  <img src="http://cdn.onlinewebfonts.com/svg/img_148071.png" style="height: 50px;" />
+                                                </td>
+                                                <td>Lorem Ipsum</td>
+                                                <td>T-Shirt</td>
+                                                <td>Rs 899</td>
+                                                <td>100</td>
+                                                <td>                                             
+                                                   <button class="btn btn-primary btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#editUser">
+                                                    <span class="btn-label">
+                                                     <span class="icon icon-edit icon-lg icon-fw"></span>
+                                                    </span>
+                                                  </button>
+                                                   <button class="btn btn-danger btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#deleteUser">
+                                                    <span class="btn-label">
+                                                     <span class="icon icon-trash icon-lg icon-fw"></span>
+                                                    </span>
+                                                  </button>
+                                                </td>
+                                              </tr>
+                                              
+                                            </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="card-footer">
+                                        <button class="btn btn-default btn-sm btn-labeled" type="button" data-toggle="modal" data-target="#addUser">Add Product</button>
+                                        <button class="btn btn-primary btn-sm btn-labeled" type="button">Edit Section</button>
+                                        <button class="btn btn-success btn-sm btn-labeled" type="button">Save</button>
+                                        <button class="btn btn-danger btn-sm btn-labeled" type="button">Delete</button>
+                                      </div>
+                                    </div>
+
+
+                                  </form>
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    
+    <?php include 'footer.php';?>
+
+
+    <div id="addNew" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Add New Section</h4>
+          </div>
+          <div class="modal-body provider-detail">
+           <div class="row">
+            <div class="col-xs-12">
+             <form class="form form-horizontal">
+                  <div class="form-group">
+                      <div class="col-md-12">
+                          <label for="Name" class="control-label">Title</label>
+                          <input id="" class="form-control" type="text">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="col-sm-12 col-md-12 addnew-btn">
+                          <button class="btn btn-primary" type="submit">Save</button>
+                      </div>
+                  </div>
+              </form>  
+             </div> 
+           </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+    <div id="addUser" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Select product</h4>
+          </div>
+          <div class="modal-body provider-detail">
+           <div class="row">
+            <div class="col-xs-12">
+              <a href="add-product-info.php" target="_blank" class="btn btn-primary">Add New Product</a>
+             <form class="form form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="form-control-7">Select Products</label>
+                <div class="col-sm-9">
+                  <select id="form-control-7" class="form-control" multiple="multiple">
+                    <option value="c-plus-plus">C++</option>
+                    <option value="css">CSS</option>
+                    <option value="java">Java</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="php">PHP</option>
+                    <option value="python">Python</option>
+                    <option value="ruby">Ruby</option>
+                  </select>
+                </div>
+              </div>
+                <div class="form-group">
+                  <div class="col-sm-8 col-md-8">
+                    <button class="btn btn-primary" type="submit">Save</button>
+                  </div>
+                </div>
+              </form>  
+             </div> 
+           </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>      
+    </div>
+
+{% include 'admin-interface/footer.html' %}

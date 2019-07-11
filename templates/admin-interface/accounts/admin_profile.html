@@ -1,0 +1,79 @@
+
+      {% load staticfiles %}
+
+{% include 'admin-interface/header.html' %}
+      <div class="profilePage"></div>
+      <div class="layout-content">
+       <div class="row gutter-xs">
+          <div class="profile-box">
+              <div class="card text-center">
+                <div class="card-image">
+                  <div class="overlay">
+                    <div class="overlay-gradient">
+                      
+                      {% if user_other_info.coverimg%}
+    					<img class="card-img-top img-responsive" src="{{user_other_info.coverimg.url}}">
+
+    					{% else %}
+
+    					<img class="card-img-top img-responsive" src="/media/img/7808910503.jpg" alt="Instagram App">
+    					
+
+						{% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="card-avatar">
+                  <a class="card-thumbnail rounded sq-100" href="#">
+                  	{% if user_other_info.profileimg%}
+    					<img class="card-img-top img-responsive" style="max-height: 100%"src="{{user_other_info.profileimg.url}}">
+
+    					{% else %}
+
+    					 <img class="img-responsive" src="/media/img/8447261358.jpg" alt="Instagram">
+    					
+
+						{% endif %}
+                   
+                  </a>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-title" style="text-transform: capitalize;">{{name}}</h3>
+                  <p class="card-text">
+                    <span class="app-users">
+                     <span class="icon icon-map-marker"></span>
+                     <strong>City</strong>: {{user_other_info.region|default_if_none:'' }}
+                    </span>
+                  </p>
+                  <p class="card-text">
+                    <span class="app-users">
+                     <span class="icon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                     <strong>Email</strong>:{{email}}
+                    </span>
+                  </p>
+                  <p class="card-text">
+                    <span class="app-users">
+                     <span class="icon icon-phone"></span>
+                     <strong>Phone</strong>:{{user_other_info.phonenum}}
+                    </span>
+                  </p>
+                  <p class="card-text">{{user_other_info.about|default_if_none:'' }}</p>
+                  <div class="col-md-12 text-center">
+
+                     <a href="/admin/users/admin_profile/edit" class="">       
+                      <button class="btn btn-primary" type="button">Edit profile</button> 
+                     </a>
+
+                     <a href="/admin/users/change_password/">       
+                        <button class="btn btn-default" type="button">Change Password</button> 
+                      </a>
+                 </div>
+                </div>
+              </div>
+            </div>
+       </div>
+      </div>
+      
+    </div>
+{% include 'admin-interface/footer.html' %}
+    

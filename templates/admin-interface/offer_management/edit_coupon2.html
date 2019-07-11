@@ -1,0 +1,612 @@
+{% load staticfiles %}
+
+{% include 'admin-interface/header.html' %} 
+
+  <style>
+
+      /* Date Picker
+========================*/
+
+  .datepicker.dropdown-menu {
+     width: 237px;
+    padding: 1.07143em 1.78571em;
+    -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    right: 0 !important;
+    }
+  .datepicker tbody {
+    color: #666; }
+  .datepicker table tr td span.active,
+  .datepicker table tr td span.active:hover,
+  .datepicker td .month.active {
+    background: #1976d2 !important; }
+  .datepicker td.active,
+  .datepicker td.selected {
+    background: #1976d2 !important; }
+    .default input[type=text] {
+    border: 1px solid #cad6e2;
+      border-radius: 5px;
+    }
+    .title-bar .form-group-lg .form-control {
+      height: 36px;
+      padding-left: 45px !important;
+      padding: 5px 15px;
+      font-size: 14px;
+      line-height: 1.333333;
+      border-radius: 0;
+      margin: 10px 0;
+    }
+    .title-bar .form-group-lg .input-with-icon .input-icon {
+      font-size: 18px;
+      height: 36px;
+      line-height: 56px;
+      width: 46px;
+    }
+
+  tbody.pro-list tr td ul{
+    list-style: none;
+    padding-left: 0px;
+  }
+  tbody.pro-list tr td ul li{
+    line-height: 15px;
+  }
+  tbody.pro-list tr td ul li span{
+    float: right;
+  }
+  .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    padding: 5px;
+  }
+  tbody.pro-list tr td .widget {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+tbody.pro-list tr td .card-body .btn-primary.btn-sm {
+    padding: 0;
+}
+tbody.pro-list tr td .widget .btn {
+    display: block;
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin: 5px !important;
+    padding: 0;
+    width: 20px;
+}
+
+</style>
+
+    <div class="responsiveTbPage offersPage">
+      <div class="layout-content">
+        <div class="layout-content-body">
+          <div class="title-bar">
+            <h1 class="title-bar-title">
+              <span class="d-ib">Edit Offer</span>
+            </h1>
+          </div>
+          <!--div class="text-center m-b">
+            <h3 class="m-b-0">Bootstrap Responsive Table</h3>
+            <small>Scroll horizontally on small devices, when viewing is smaller than 768px.</small>
+          </div-->
+          <div class="row">
+
+            <div class="col-md-6 col-md-offset-3 col-xs-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="m-t-0 text-center" style="margin-bottom: 20px ">Edit Coupon</h4>
+
+                     {% if form.errors %}
+
+
+                      {% for field in form %}
+                          {% for error in field.errors %}
+                              <p style="color:red;text-align: center; margin:0px">
+                                  <span>{{ error|escape }}</span>
+                              </p>
+                          {% endfor %}
+                      {% endfor %}
+
+                      {% for error in form.non_field_errors %}
+                         <p style="color:red;text-align: center; margin:0px">
+                              <span>{{ error|escape }}</span>
+                          </p>
+                      {% endfor %}
+
+                    {% endif %}
+
+                      {% if messages %}
+                      {% for message in messages %}
+                      <p style="color:green;text-align: center;">{{message}}</p>
+                 {% endfor %}
+                {% endif %}
+
+                  <form class="form"  method="POST" action="/admin/users/coupon_edit/{{coupon.id}}" enctype='multipart/form-data'>{% csrf_token%}
+                    <div class="form-group col-md-12">
+                      <label for="email-1">Coupon Code</label>
+                      <input style="text-transform: uppercase;" id="email-1" class="form-control" type="text" name="code" value="{{coupon.code}}"  required>
+                    </div>
+                    <div class="form-group col-md-5">
+                      <label for="password-1">Select For All</label><br>
+
+                      <label class="custom-control custom-control-primary custom-checkbox">
+
+                        {% if coupon.is_for_all_user %}
+                          <input class="custom-control-input" id="isAllUser" type="checkbox" value="True" name="is_all_user" checked>
+                        {% else %}
+                        <input class="custom-control-input" id="isAllUser" type="checkbox" value="True" name="is_all_user">
+                        {% endif %}
+
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-label">Users</span>
+                        </label>
+                      <label class="custom-control custom-control-primary custom-checkbox">
+
+                        {% if coupon.is_for_all_product %}
+                          <input class="custom-control-input"  id="isAllProduct" type="checkbox" value="True" name="is_all_product" checked>
+                          {% else %}
+                          <input class="custom-control-input"  id="isAllProduct" type="checkbox" value="True" name="is_all_product" >
+
+                         {% endif %} 
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-label">Products</span>
+                        </label>
+                    </div>
+                    <div class="form-group col-md-7">
+                      <label for="password-1">Add Users/Products</label><br>
+
+                      {% if coupon.is_for_all_user %}
+
+                      <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#selectUsers" id="selectedUserButton" disabled>Select Users</button>
+                      
+                      {% else %}
+
+                      <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#selectUsers" id="selectedUserButton">Select Users</button>
+
+                      {% endif %}
+
+
+
+                      {% if coupon.is_for_all_product %}
+
+                      <button class="btn btn-default" style="float: right;" type="button"  data-toggle="modal" id="selectedProductButton" data-target="#selectPro" disabled>Select Products</button>
+
+                      {% else %}
+
+
+                      <button class="btn btn-default" style="float: right;" type="button"  data-toggle="modal" id="selectedProductButton" data-target="#selectPro">Select Products</button>
+
+
+                      {% endif %}
+
+
+
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="password-1">Amount Type</label><br>
+                      <label class="custom-control custom-control-primary custom-radio">
+                        {% if coupon.coupon_type == '1' %}
+
+                        <input class="custom-control-input" type="radio" name="coupon_type" value="1" checked>
+
+                        {% else %}
+
+                        <input class="custom-control-input" type="radio" name="coupon_type" value="1">
+
+                        {% endif %}
+
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-label">%</span>
+                      </label>
+                      <label class="custom-control custom-control-primary custom-radio">
+                        {% if coupon.coupon_type == '2' %}
+                        <input class="custom-control-input" type="radio" name="coupon_type" value="2" checked="checked">
+
+                        {% else %}
+
+                        <input class="custom-control-input" type="radio" name="coupon_type" value="2">
+
+                        {% endif %}
+
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-label"><i class="fa fa-inr"></i></span>
+                      </label>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="password-1">Value</label>
+                      <input id="password-1" class="form-control" type="number" name="value" required value="{{coupon.value}}">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="password-1">Max Discount (for %)</label>
+
+                      {% if coupon.max_amount %}
+
+                      <input class="form-control" type="number" id="max_amount"
+                      name="max_amount" value="{{coupon.max_amount}}" required>
+
+                      {% else %}
+
+                      <input class="form-control" type="number" id="max_amount"
+                      name="max_amount" value=""disabled required>
+
+                      {% endif %}
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="password-1">Usage Limit</label>
+                      <select class="form-control" id="usage_limit" name="usage_limit" >
+                        <option id="1">1</option>
+                        <option id="2">2</option>
+                        <option id="3">3</option>
+                        <option id="4">4</option>
+                        <option id="5">5</option>
+                        <option id="6">6</option>
+                        <option id="7">7</option>
+                        <option id="8">8</option>
+                        <option id="9">9</option>
+                        <option id="10">10</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="password-1">Start Date</label>
+                      <div class="input-with-icon">
+                        <input class="form-control" type="text" data-provide="datepicker" data-date-today-highlight="true" autocomplete="off" id="startdate" placeholder="From" name="valid_from" value="{{coupon.valid_from|date:"m/d/Y"}}" required>
+                        <span class="icon icon-calendar input-icon"></span>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="password-1">End Date</label>
+                      <div class="input-with-icon">
+                        <input class="form-control" type="text" data-provide="datepicker" data-date-today-highlight="true"" autocomplete="off" id="enddate" placeholder="To" name="valid_to" value="{{coupon.valid_to|date:"m/d/Y"}}" required>
+                        <span class="icon icon-calendar input-icon"></span>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label for="password-1">Description</label>
+                      <input id="password-1" class="form-control" type="text" name="description" required value="{{coupon.description}}">
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label for="password-1">Terms &amp; Conditions</label>
+                      <textarea class="form-control" name="terms" required>{{coupon.terms_and_cond}}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                    
+                      <a href="/admin/users/coupon_management/" class="btn btn-default" type="submit">Back</a>
+                       <button id="submit" class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    <div id="uservalues">
+
+                      {% for user in coupon.selected_users.all %}
+
+                      <input type="hidden" id="{{user.id}}" value="{{user.id}}" name="selectedUserIds">
+
+                      {% endfor %}
+
+                      
+                    </div>
+                    <div id="productvalues">
+                      {% for product in coupon.selected_product.all %}
+
+                      <input type="hidden" id="{{product.id}}" value="{{product.id}}" name="selectedProductIds">
+
+                      {% endfor %}
+
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<div id="selectUsers" tabindex="-1" role="dialog" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Select Users</h4>
+          </div>
+          <div class="modal-body">
+            
+            <table id="demo-datatables-2" class="table table-striped table-bordered table-nowrap dataTable" cellspacing="0" width="100%" >
+              <thead>
+                  <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Email ID</th>
+                      <th>Mobile</th>
+                  </tr>
+              </thead>
+
+              <tbody id="appusers">
+
+
+                {% for user in selected_users%}
+
+                   <tr>
+                      <td>
+                        <label class="custom-control custom-control-primary custom-checkbox">
+
+                          <input class="custom-control-input userselect" data-id="{{user.user.id}}" type="checkbox" checked name="users">
+                          
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-label"></span>
+                        </label>
+                      </td>
+                      <td>{{user.user.first_name}}</td>
+                      <td>{{user.user.email}}</td>
+                      <td>{{user.phonenum}}</td>
+                  </tr>
+
+
+
+                {% endfor %}
+
+                {% for user in users %}
+                  <tr>
+                      <td>
+                        <label class="custom-control custom-control-primary custom-checkbox">
+
+                          <input class="custom-control-input userselect" data-id="{{user.user.id}}" type="checkbox" name="users">
+                          
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-label"></span>
+                        </label>
+                      </td>
+                      <td>{{user.user.first_name}}</td>
+                      <td>{{user.user.email}}</td>
+                      <td>{{user.phonenum}}</td>
+                  </tr>
+                {% endfor %}
+                  
+
+              </tbody>
+                
+          </table>
+
+            <button class="btn btn-primary" class="close" data-dismiss="modal">
+              Ok</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<div id="selectPro" tabindex="-1" role="dialog" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Coupon Detail</h4>
+          </div>
+          <div class="modal-body">
+            
+            <table id="demo-datatables-1" class="table table-striped table-bordered table-nowrap dataTable" cellspacing="0" width="100%">
+              <thead>
+                  <tr>
+                      <th>#</th>
+                      <th>Product Id</th>
+                      <th>Product name</th>
+                      <th>Price</th>
+                      <th>Offered Price</th>
+                      <th>Added on</th>
+                      <th>Status</th>
+                      <th>Stock</th>
+                  </tr>
+              </thead>
+              <tbody class="pro-list">
+
+
+                 {% for product in selected_products %}
+                  <tr>
+
+
+                      <td>
+                        <label class="custom-control custom-control-primary custom-checkbox">
+                          <input class="custom-control-input productselect" data-id="{{product.id}}" type="checkbox" name="product" checked>
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-label"></span>
+                        </label>
+                      </td>
+                      <td>{{product.id}}</td>
+                      <td>{{product.name}}</td>
+                      <td>{{product.actual_price}}</td>
+                      <td>{{product.special_price|default_if_none:''}}</td>
+
+                      <td>{{product.created_date}}</td>
+                      {% if product.active %}
+                      <td class="text-success">Active</td>
+                      {% else %}
+
+                      <td class="text-danger">Active</td>
+                      {% endif %}
+
+
+                      {% if product.stock_status %}
+                      <td class="text-success">In stock</td>
+                      {% else %}
+
+                      <td class="text-danger">Outof stock</td>
+                      {% endif %}
+                  </tr>
+                  {% endfor %}
+
+                 
+                {% for product in products %}
+                  <tr>
+
+
+                      <td>
+                        <label class="custom-control custom-control-primary custom-checkbox">
+                          <input class="custom-control-input productselect" data-id="{{product.id}}" type="checkbox" name="product">
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-label"></span>
+                        </label>
+                      </td>
+                      <td>{{product.id}}</td>
+                      <td>{{product.name}}</td>
+                      <td>{{product.actual_price}}</td>
+                      <td>{{product.special_price|default_if_none:''}}</td>
+
+                      <td>{{product.created_date}}</td>
+                      {% if product.active %}
+                      <td class="text-success">Active</td>
+                      {% else %}
+
+                      <td class="text-danger">Active</td>
+                      {% endif %}
+
+
+                      {% if product.stock_status %}
+                      <td class="text-success">In stock</td>
+                      {% else %}
+
+                      <td class="text-danger">Outof stock</td>
+                      {% endif %}
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+            <button class="btn btn-primary" class="close" data-dismiss="modal">
+              Ok</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+{% include 'admin-interface/footer.html' %}
+
+<script type="text/javascript">
+          $(document).ready(function(){
+
+            $(".clicksr").click();
+
+
+            $("#startdate").datepicker({
+                todayBtn:  1,
+                autoclose: true,
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $('#enddate').datepicker('setStartDate', minDate);
+            });
+
+            $("#enddate").datepicker()
+                .on('changeDate', function (selected) {
+                 var maxDate = new Date(selected.date.valueOf());
+                 $('#startdate').datepicker('setEndDate', maxDate);
+            });
+        });
+
+
+  </script>
+
+  <script type="text/javascript">
+
+
+ $(document).on('click','.userselect',function(){
+
+  var user_id = $(this).attr('data-id');
+ 
+
+
+    if (this.checked) {
+        $('#uservalues').append(`<input type="hidden" id=`+user_id+` value=`+user_id+` name="selectedUserIds">`);
+
+        
+    }else{
+      console.log(user_id)
+      $("#"+user_id).remove();
+    }
+ })
+
+  $(document).on('click','.productselect',function(){
+
+  var product_id = $(this).attr('data-id');
+ 
+
+
+    if (this.checked) {
+        $('#productvalues').append(`<input type="hidden" id=`+product_id+` value=`+product_id+` name="selectedProductIds">`);
+
+        
+    }else{
+      
+      $("#"+product_id).remove();
+    }
+ })
+
+
+
+
+ $(function(){
+
+
+  $('#isAllUser').click(function(){
+
+    if ($(this).is(':checked'))
+    {
+     $('#selectedUserButton').prop("disabled",true);
+     // $('#uservalues').empty()
+     // $('"input[name='user']"').removeAttr('checked');
+    }else{
+      $('#selectedUserButton').prop("disabled",false);
+
+    }
+
+  })
+
+  $('#isAllProduct').click(function(){
+
+    if ($(this).is(':checked'))
+    {
+     $('#selectedProductButton').prop("disabled",true);
+
+    }else{
+      $('#selectedProductButton').prop("disabled",false);
+      // $('#productvalues').empty()
+      // $('input:checkbox').removeAttr('checked');
+
+    }
+
+  })
+
+
+  // $('disc_type').click(function(){
+
+  //   if ($(this).is(':checked'))
+  //   {
+  //     if ($(this).val()==1){
+  //       $('#max_amount').prop("disabled",false);
+  //       console.log('f')
+        
+  //     }else{
+  //       $('#max_amount').prop("disabled",true);
+  //       $('#max_amount').val('')
+  //       console.log('t')
+
+  //     }
+  //   }
+  // });
+  
+});
+
+$("#usage_limit").val('{{coupon.usage_limit}}');
+
+
+
+</script>
